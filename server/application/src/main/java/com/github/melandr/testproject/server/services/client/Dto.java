@@ -10,7 +10,7 @@ class Dto {
 	@Getter
 	static class AuthRequest{
 		@JsonProperty
-		String name;
+        String login;
 		@JsonProperty
 		String password;
 	}

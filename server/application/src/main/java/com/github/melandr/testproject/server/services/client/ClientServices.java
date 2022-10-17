@@ -38,7 +38,7 @@ class ClientServices {
     @PostMapping(value = "/client/auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     ResponseEntity clientAuth(@RequestBody AuthRequest request) {
-        String login = request.getName();
+        String login = request.getLogin();
 
         if (StringUtils.isBlank(login) || StringUtils.isBlank(request.getPassword())) {
             return new ResponseEntity<ErrorResponse>(new ErrorResponse("Required field(s) is null or empty!"),
@@ -59,7 +59,7 @@ class ClientServices {
                 TOKENS.put(login, DigestUtils.md5DigestAsHex(phrase.getBytes(StandardCharsets.UTF_8)));
             }
 
-            return new ResponseEntity<AuthResponse>(new AuthResponse(TOKENS.get(request.getName())), HttpStatus.OK);
+            return new ResponseEntity<AuthResponse>(new AuthResponse(TOKENS.get(request.getLogin())), HttpStatus.OK);
         }
 
         return new ResponseEntity<AuthResponse>(new AuthResponse("Password is wrong!"), HttpStatus.NOT_FOUND);
