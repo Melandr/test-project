@@ -14,10 +14,10 @@ class Dto {
 		@JsonProperty
 		String password;
 	}
-	
+
 	@AllArgsConstructor
 	static class AuthResponse{
 		@JsonProperty
-		private String sign;
+        private String token;
 	}
 }

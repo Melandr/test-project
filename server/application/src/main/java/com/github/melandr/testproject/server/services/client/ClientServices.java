@@ -30,7 +30,7 @@ class ClientServices {
 
 	private static final String MD5_HASH_PASSWORD = DigestUtils.md5DigestAsHex(ACCEPTABLE_USER_PASSWORD.getBytes(StandardCharsets.UTF_8));
 
-    private static final Map<String, String> SIGNS = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<String, String> TOKENS = Collections.synchronizedMap(new HashMap<>());
 
 	@PostMapping(value = "/client/auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
@@ -42,14 +42,14 @@ class ClientServices {
 		}
 
         if (ACCEPTABLE_USER_NAME.equals(userName) && MD5_HASH_PASSWORD.equals(request.getPassword())) {
-            if (!SIGNS.containsKey(userName)) {
+            if (!TOKENS.containsKey(userName)) {
                 String phrase = userName + "#@#" + request.getPassword() + "_17QJcv@!~zc"
                         + DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now());
-                SIGNS.put(userName, DigestUtils.md5DigestAsHex(phrase.getBytes(StandardCharsets.UTF_8)));
+                TOKENS.put(userName, DigestUtils.md5DigestAsHex(phrase.getBytes(StandardCharsets.UTF_8)));
             }
 
             return new ResponseEntity<AuthResponse>(
-                    new AuthResponse(SIGNS.get(request.getName())), HttpStatus.OK);
+                    new AuthResponse(TOKENS.get(request.getName())), HttpStatus.OK);
 		}
 
 		return new ResponseEntity<AuthResponse>(new AuthResponse("user or password is fail!"), HttpStatus.NOT_FOUND);
