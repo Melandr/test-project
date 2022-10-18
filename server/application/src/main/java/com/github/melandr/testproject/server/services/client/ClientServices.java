@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ehcache.Cache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +27,8 @@ import com.github.melandr.testproject.server.services.error.ErrorResponse;
 @RestController
 class ClientServices {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientServices.class);
+
     @Autowired
     private UserProviderI userProvider;
 
@@ -34,6 +38,7 @@ class ClientServices {
     @PostMapping(value = "/client/auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     ResponseEntity clientAuth(@RequestBody AuthRequest request) {
+        LOGGER.info("authRequest is: " + request);
         String login = request.getLogin();
 
         if (StringUtils.isBlank(login) || StringUtils.isBlank(request.getPassword())) {
