@@ -4,6 +4,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.StringUtils;
 import org.ehcache.Cache;
 import org.slf4j.Logger;
@@ -13,17 +16,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.DigestUtils;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.melandr.testproject.server.protocol.user.UserI;
 import com.github.melandr.testproject.server.protocol.user.UserProviderI;
 import com.github.melandr.testproject.server.services.client.Dto.AuthRequest;
-import com.github.melandr.testproject.server.services.client.Dto.AuthResponse;
+import com.github.melandr.testproject.server.services.client.Dto.TokenContainer;
 import com.github.melandr.testproject.server.services.error.ErrorResponse;
 
+@Validated
 @RestController
 class ClientServices {
 
@@ -49,7 +56,7 @@ class ClientServices {
         UserI user = userProvider.getUserByLogin(login);
 
         if (user == null) {
-            return new ResponseEntity<AuthResponse>(new AuthResponse("Not found user with login: " + login + "!"),
+            return new ResponseEntity<TokenContainer>(new TokenContainer("Not found user with login: " + login + "!"),
                     HttpStatus.NOT_FOUND);
         }
 
@@ -60,11 +67,17 @@ class ClientServices {
                 tokensCache.put(login, DigestUtils.md5DigestAsHex(phrase.getBytes(StandardCharsets.UTF_8)));
             }
 
-            return new ResponseEntity<AuthResponse>(new AuthResponse(tokensCache.get(request.getLogin())),
+            return new ResponseEntity<TokenContainer>(new TokenContainer(tokensCache.get(request.getLogin())),
                     HttpStatus.OK);
         }
 
-        return new ResponseEntity<AuthResponse>(new AuthResponse("Password is wrong!"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<TokenContainer>(new TokenContainer("Password is wrong!"), HttpStatus.NOT_FOUND);
     }
 
+    @DeleteMapping(value = "/client/logout")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    void logout(@Valid @NotNull @RequestBody TokenContainer tokenContainer) {
+        LOGGER.info("logoutRequest is: " + tokenContainer);
+        tokensCache.remove(tokenContainer.getToken());
+    }
 }

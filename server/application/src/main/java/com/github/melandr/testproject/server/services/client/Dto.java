@@ -1,9 +1,12 @@
 package com.github.melandr.testproject.server.services.client;
 
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 class Dto {
@@ -11,14 +14,19 @@ class Dto {
     @ToString
 	@Getter
 	static class AuthRequest{
+        @NotBlank
 		@JsonProperty
         String login;
+        @NotBlank
 		@JsonProperty
 		String password;
 	}
 
+    @Getter
+    @NoArgsConstructor
 	@AllArgsConstructor
-	static class AuthResponse{
+	static class TokenContainer{
+        @NotBlank
 		@JsonProperty
         private String token;
 	}
