@@ -3,11 +3,9 @@ package com.github.melandr.testproject.server.services.client;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ehcache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,10 +28,8 @@ class ClientServices {
     @Autowired
     private UserProviderI userProvider;
 
-//    @Setter(onMethod_ = { @Autowired }, onParam_ = { @Value("#{@'cacheHelper'.getTokensCache()}") })
-//    private Cache<String, String> cache;
-
-    private static final Map<String, String> TOKENS = Collections.synchronizedMap(new HashMap<>());
+    @Autowired
+    private Cache<String, String> tokensCache;
 
     @PostMapping(value = "/client/auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
@@ -53,13 +49,14 @@ class ClientServices {
         }
 
         if (user != null && DigestUtils.md5DigestAsHex(user.getPassword()).equals(request.getPassword())) {
-            if (!TOKENS.containsKey(login)) {
+            if (!tokensCache.containsKey(login)) {
                 String phrase = login + "#@#" + request.getPassword() + "_17QJcv@!~zc"
                         + DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now());
-                TOKENS.put(login, DigestUtils.md5DigestAsHex(phrase.getBytes(StandardCharsets.UTF_8)));
+                tokensCache.put(login, DigestUtils.md5DigestAsHex(phrase.getBytes(StandardCharsets.UTF_8)));
             }
 
-            return new ResponseEntity<AuthResponse>(new AuthResponse(TOKENS.get(request.getLogin())), HttpStatus.OK);
+            return new ResponseEntity<AuthResponse>(new AuthResponse(tokensCache.get(request.getLogin())),
+                    HttpStatus.OK);
         }
 
         return new ResponseEntity<AuthResponse>(new AuthResponse("Password is wrong!"), HttpStatus.NOT_FOUND);

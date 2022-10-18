@@ -9,17 +9,18 @@ import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@Component("cacheHelper")
-public class CacheHelper {
+@Configuration
+public class CacheConfig {
 
-    private static final String TOKENS_CACHE_NAME = "tokensCache";
+    public static final String TOKENS_CACHE_NAME = "tokensCache";
 
     private CacheManager cacheManager;
 
     @Autowired
-    CacheHelper() {
+    CacheConfig() {
         cacheManager = CacheManagerBuilder.newCacheManagerBuilder().build();
         cacheManager.init();
 
@@ -29,6 +30,7 @@ public class CacheHelper {
                         .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(5))).build());
     }
 
+    @Bean(TOKENS_CACHE_NAME)
     public Cache<String, String> getTokensCache() {
         return cacheManager.getCache(TOKENS_CACHE_NAME, String.class, String.class);
     }
