@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.melandr.testproject.server.exceptions.TokenExpireException;
 
 import lombok.AllArgsConstructor;
 
@@ -19,9 +20,10 @@ class ExceptionHandler {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @org.springframework.web.bind.annotation.ExceptionHandler(NoHandlerFoundException.class)
-    ErrorDetail handleNoHandlerFoundException(NoHandlerFoundException exception) {
-        return new ErrorDetail("Not found url!", null);
+    @org.springframework.web.bind.annotation.ExceptionHandler({ NoHandlerFoundException.class,
+            TokenExpireException.class })
+    ErrorDetail handleNoHandlerFoundException(Exception exception) {
+        return new ErrorDetail("Not found", exception.getMessage());
     }
 
     @ResponseBody

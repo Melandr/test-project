@@ -26,6 +26,8 @@ class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     private SignInterceptor signInterceptor;
+    @Autowired
+    private TokenLiveInterceptor tokenLiveInterceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -43,7 +45,11 @@ class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(signInterceptor).addPathPatterns("/client/**").excludePathPatterns("/client/auth");
+        registry.addInterceptor(signInterceptor).addPathPatterns("/client/**").excludePathPatterns("/client/auth")
+                .order(1);
+        registry.addInterceptor(tokenLiveInterceptor).addPathPatterns("/client/**")
+                .excludePathPatterns("/client/auth", "/client/logout")
+                .order(2);
     }
 
     @Override

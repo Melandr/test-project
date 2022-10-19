@@ -13,9 +13,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CacheConfig {
+class CacheConfig {
 
-    public static final String TOKENS_CACHE_NAME = "tokensCache";
+    public static final String STRINGS_CACHE_NAME = "stringsCache";
 
     private CacheManager cacheManager;
 
@@ -24,14 +24,14 @@ public class CacheConfig {
         cacheManager = CacheManagerBuilder.newCacheManagerBuilder().build();
         cacheManager.init();
 
-        cacheManager.createCache(TOKENS_CACHE_NAME,
+        cacheManager.createCache(STRINGS_CACHE_NAME,
                 CacheConfigurationBuilder
                         .newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(10))
                         .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(5))).build());
     }
 
-    @Bean(TOKENS_CACHE_NAME)
-    public Cache<String, String> getTokensCache() {
-        return cacheManager.getCache(TOKENS_CACHE_NAME, String.class, String.class);
+    @Bean(STRINGS_CACHE_NAME)
+    Cache<String, String> getStringsCache() {
+        return cacheManager.getCache(STRINGS_CACHE_NAME, String.class, String.class);
     }
 }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 class Dto {
@@ -22,12 +21,16 @@ class Dto {
 		String password;
 	}
 
-    @Getter
-    @NoArgsConstructor
 	@AllArgsConstructor
 	static class TokenContainer{
         @NotBlank
 		@JsonProperty
         private String token;
 	}
+
+    @AllArgsConstructor
+    static class UserResponse {
+        @JsonProperty
+        String name;
+    }
 }
