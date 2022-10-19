@@ -5,12 +5,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ehcache.Cache;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,8 +33,6 @@ import com.github.melandr.testproject.server.services.error.ErrorResponse;
 @RestController
 class ClientServices {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientServices.class);
-
     @Autowired
     private UserProviderI userProvider;
 
@@ -45,7 +42,6 @@ class ClientServices {
     @PostMapping(value = "/client/auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     ResponseEntity clientAuth(@RequestBody AuthRequest request) {
-        LOGGER.info("authRequest is: " + request);
         String login = request.getLogin();
 
         if (StringUtils.isBlank(login) || StringUtils.isBlank(request.getPassword())) {
@@ -76,8 +72,7 @@ class ClientServices {
 
     @DeleteMapping(value = "/client/logout")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    void logout(@Valid @NotNull @RequestBody TokenContainer tokenContainer) {
-        LOGGER.info("logoutRequest is: " + tokenContainer);
-        tokensCache.remove(tokenContainer.getToken());
+    void logout(@Valid @NotBlank @RequestHeader(name = "token") String token) {
+        tokensCache.remove(token);
     }
 }

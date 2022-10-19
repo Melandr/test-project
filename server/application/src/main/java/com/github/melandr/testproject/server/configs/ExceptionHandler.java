@@ -15,12 +15,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 
 @ControllerAdvice
-public class ExceptionHandler {
+class ExceptionHandler {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @org.springframework.web.bind.annotation.ExceptionHandler(NoHandlerFoundException.class)
-    public ErrorDetail handleNoHandlerFoundException(NoHandlerFoundException exception) {
+    ErrorDetail handleNoHandlerFoundException(NoHandlerFoundException exception) {
         return new ErrorDetail("Not found url!", null);
     }
 
@@ -28,15 +28,15 @@ public class ExceptionHandler {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @org.springframework.web.bind.annotation.ExceptionHandler({ MethodArgumentNotValidException.class,
             HttpMessageNotReadableException.class, HttpRequestMethodNotSupportedException.class,
-            ServletRequestBindingException.class })
-    public ErrorDetail handleStandartBadRequestException(Exception exception) {
+            ServletRequestBindingException.class, SignatureException.class })
+    ErrorDetail handleStandartBadRequestException(Exception exception) {
         return new ErrorDetail("Wrong request", exception.getMessage());
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @org.springframework.web.bind.annotation.ExceptionHandler(Throwable.class)
-    public ErrorDetail handleThrowable(Throwable exception) {
+    ErrorDetail handleThrowable(Throwable exception) {
         return new ErrorDetail("Unexpected problems!", exception.getMessage());
     }
 

@@ -2,8 +2,6 @@ package com.github.melandr.testproject.server.configs.filters;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 import javax.servlet.FilterChain;
@@ -20,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
+
+import com.github.melandr.testproject.server.configs.utils.RequestUtils;
 
 public class LogRequestFilter extends OncePerRequestFilter {
 
@@ -78,13 +78,7 @@ public class LogRequestFilter extends OncePerRequestFilter {
     }
 
     private String makeBodyInfo(HttpServletRequest request) throws IOException {
-        ServletInputStream stream = request.getInputStream();
-        String body = "";
-        if (stream != null) {
-            String charset = StringUtils.defaultIfBlank(request.getCharacterEncoding(), StandardCharsets.UTF_8.name());
-            body = org.apache.commons.io.IOUtils.toString(stream, Charset.forName(charset));
-        }
-        return "\tRequest body: " + body.toString() + "\n";
+        return "\tRequest body: " + RequestUtils.getBody(request) + "\n";
     }
 
     private String makeResponseInfo(ContentCachingResponseWrapper response) throws IOException {

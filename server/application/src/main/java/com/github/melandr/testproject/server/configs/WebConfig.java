@@ -3,6 +3,7 @@ package com.github.melandr.testproject.server.configs;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -21,6 +23,9 @@ import com.github.melandr.testproject.server.configs.filters.LogRequestFilter;
 @EnableWebMvc
 @Configuration
 class WebConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private SignInterceptor signInterceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -34,6 +39,11 @@ class WebConfig implements WebMvcConfigurer {
         registrationBean.addUrlPatterns("/client/*");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return registrationBean;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(signInterceptor).addPathPatterns("/client/**").excludePathPatterns("/client/auth");
     }
 
     @Override
