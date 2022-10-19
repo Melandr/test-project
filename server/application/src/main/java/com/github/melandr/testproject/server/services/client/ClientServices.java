@@ -56,7 +56,7 @@ class ClientServices {
         UserI user = userProvider.getUserByLogin(login);
 
         if (user == null) {
-            return new ResponseEntity<TokenContainer>(new TokenContainer("Not found user with login: " + login + "!"),
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Not found user with login: " + login + "!"),
                     HttpStatus.NOT_FOUND);
         }
 
@@ -71,7 +71,7 @@ class ClientServices {
                     HttpStatus.OK);
         }
 
-        return new ResponseEntity<TokenContainer>(new TokenContainer("Password is wrong!"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<ErrorResponse>(new ErrorResponse("Password is wrong!"), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "/client/logout")
