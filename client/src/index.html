@@ -1,8 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <title>Document</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.muicss.com/mui-latest/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.muicss.com/mui-latest/js/mui.min.js"></script>
+    <title>testJsWithJava</title>
   </head>
-  <body></body>
+  <body>
+    <form class="form" id="form">
+      <div class="title">Добро пожаловать</div>
+      <div class="input-container ic1">
+        <input id="login-input" name="login" class="input" type="text" placeholder=" " required />
+        <div class="cut"></div>
+        <label for="login-input" class="placeholder">Логин</label>
+      </div>
+      <div class="input-container ic2">
+        <input id="password-input" name="password" class="input" type="text" placeholder=" " required />
+        <div class="cut"></div>
+        <label for="password-input" class="placeholder">Пароль</label>
+      </div>
+      <button type="text" class="submit" id="submit">submit</button>
+      <div id="loader" class="hidden">Отправляем...</div>
+    </form>
+  </body>
 </html>
