@@ -42,15 +42,20 @@ public class LogRequestFilter extends OncePerRequestFilter {
 
     private String makeRequestInfo(HttpServletRequest request) throws IOException {
         StringBuilder sb = new StringBuilder();
-        sb.append(makeUrlInfo(request.getRequestURL()));
+        sb.append(makeUrlInfo(request.getRequestURL().toString() + RequestUtils.getParamsRepresentation(request)));
+        sb.append(methodInfo(request.getMethod()));
         sb.append(makeCookiesInfo(request.getCookies()));
         sb.append(makeHeadersInfo(request));
         sb.append(makeBodyInfo(request));
         return sb.toString();
     }
 
-    private String makeUrlInfo(StringBuffer requestURL) {
-        return "\tRequestURL: " + requestURL + "\n";
+    private String methodInfo(String method) {
+        return "\tRequest method: " + method + "\n";
+    }
+
+    private String makeUrlInfo(String requestURL) {
+        return "\tRequest URL: " + requestURL + "\n";
     }
 
     private String makeCookiesInfo(Cookie[] cookies) {
