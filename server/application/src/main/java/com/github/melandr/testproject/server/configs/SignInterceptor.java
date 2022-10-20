@@ -35,7 +35,9 @@ class SignInterceptor implements AsyncHandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-
+        if ("1".equals(request.getHeader("fakeCheck"))) {
+            return true;
+        }
         LocalDateTime current = LocalDateTime.now();
         String uri = request.getRequestURL().toString() + RequestUtils.getParamsRepresentation(request);
         String tmst = request.getHeader("tmst");
@@ -64,9 +66,6 @@ class SignInterceptor implements AsyncHandlerInterceptor {
         String ownSign = makeSign(toSign);
         LOGGER.info("toSign: " + toSign + ", buildedSign: " + ownSign);
 
-        if ("1".equals(request.getHeader("fakeCheck"))) {
-            return true;
-        }
         if (ldt.isBefore(current.minusSeconds(10)) || ldt.isAfter(current)) {
             throw new SignatureException("tmst has wrong value!");
         }
