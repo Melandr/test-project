@@ -30,6 +30,7 @@ class SignInterceptor implements AsyncHandlerInterceptor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SignInterceptor.class);
     private static final DateTimeFormatter LDF = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    private static final String HEADER_PARAM_NAME = "sign";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -39,7 +40,7 @@ class SignInterceptor implements AsyncHandlerInterceptor {
         String uri = request.getRequestURL().toString() + RequestUtils.getParamsRepresentation(request);
         String date = request.getHeader("date");
         String token = request.getHeader("token");
-        String sign = request.getHeader("sign");
+        String sign = request.getHeader(HEADER_PARAM_NAME);
 
         if (StringUtils.isBlank(date)) {
             throw new SignatureException("date is null or empty!");
@@ -91,7 +92,10 @@ class SignInterceptor implements AsyncHandlerInterceptor {
             Iterator<String> it = request.getHeaderNames().asIterator();
             SortedSet<String> names = new TreeSet<>();
             while (it.hasNext()) {
-                names.add(it.next());
+                String hName = it.next();
+                if (!HEADER_PARAM_NAME.equals(hName)) {
+                    names.add(hName);
+                }
             }
 
             if (names.size() > 0) {
