@@ -38,7 +38,7 @@ class SignInterceptor implements AsyncHandlerInterceptor {
 
         LocalDateTime current = LocalDateTime.now();
         String uri = request.getRequestURL().toString() + RequestUtils.getParamsRepresentation(request);
-        String date = request.getHeader("date");
+        String date = request.getHeader("tmst");
         String token = request.getHeader("token");
         String sign = request.getHeader(HEADER_PARAM_NAME);
 
