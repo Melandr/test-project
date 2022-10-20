@@ -31,7 +31,7 @@ class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").exposedHeaders("Access-Control-Allow-Origin");
+        registry.addMapping("/**");
     }
 
     @Bean
