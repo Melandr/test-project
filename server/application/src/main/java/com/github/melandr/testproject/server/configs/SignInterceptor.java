@@ -38,12 +38,12 @@ class SignInterceptor implements AsyncHandlerInterceptor {
 
         LocalDateTime current = LocalDateTime.now();
         String uri = request.getRequestURL().toString() + RequestUtils.getParamsRepresentation(request);
-        String date = request.getHeader("tmst");
+        String tmst = request.getHeader("tmst");
         String token = request.getHeader("token");
         String sign = request.getHeader(HEADER_PARAM_NAME);
 
-        if (StringUtils.isBlank(date)) {
-            throw new SignatureException("date is null or empty!");
+        if (StringUtils.isBlank(tmst)) {
+            throw new SignatureException("tmst is null or empty!");
         } else if (StringUtils.isBlank(token)) {
             throw new SignatureException("token is null or empty!");
         } else if (StringUtils.isBlank(sign)) {
@@ -51,10 +51,10 @@ class SignInterceptor implements AsyncHandlerInterceptor {
         }
         LocalDateTime ldt = null;
         try {
-            TemporalAccessor ta = LDF.parse(date);
+            TemporalAccessor ta = LDF.parse(tmst);
             ldt = LocalDateTime.from(ta);
         } catch (DateTimeParseException dtpex) {
-            throw new SignatureException("date has wrong format!");
+            throw new SignatureException("tmst has wrong format!");
         }
 
         String body = RequestUtils.getBody(request);
@@ -68,7 +68,7 @@ class SignInterceptor implements AsyncHandlerInterceptor {
             return true;
         }
         if (ldt.isBefore(current.minusSeconds(10)) || ldt.isAfter(current)) {
-            throw new SignatureException("date has wrong value!");
+            throw new SignatureException("tmst has wrong value!");
         }
         if (!ownSign.equals(sign)) {
             throw new SignatureException("sign has wrong value!");
