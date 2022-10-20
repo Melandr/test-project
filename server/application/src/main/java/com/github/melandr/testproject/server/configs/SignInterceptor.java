@@ -101,7 +101,7 @@ class SignInterceptor implements AsyncHandlerInterceptor {
             if (names.size() > 0) {
                 for (String hName : names) {
                     String value = StringUtils.trimToEmpty(request.getHeader(hName));
-                    sb.append(hName).append(":").append(value).append(",");
+                    sb.append(hName).append("=").append(value).append(",");
                 }
                 sb.deleteCharAt(sb.length() - 1);
             }
