@@ -102,6 +102,6 @@ class ClientServices {
             throw new TokenExpireException();
         }
         UserI user = userProvider.getUserByLogin(login);
-        return new UserResponse(user.getLogin());
+        return new UserResponse(user.getName());
     }
 }
