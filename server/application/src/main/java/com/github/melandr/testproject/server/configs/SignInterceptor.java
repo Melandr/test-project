@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -30,7 +32,10 @@ class SignInterceptor implements AsyncHandlerInterceptor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SignInterceptor.class);
     private static final DateTimeFormatter LDF = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-    private static final String HEADER_PARAM_NAME = "sign";
+    private static final String TOKEN_HEADER_PARAM_NAME = "token";
+    private static final String TMST_HEADER_PARAM_NAME = "tmst";
+    private static final List<String> ACCEPTABLE_HEADERS = Arrays.asList(TMST_HEADER_PARAM_NAME,
+            TOKEN_HEADER_PARAM_NAME);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -40,9 +45,9 @@ class SignInterceptor implements AsyncHandlerInterceptor {
         }
         LocalDateTime current = LocalDateTime.now();
         String uri = request.getRequestURL().toString() + RequestUtils.getParamsRepresentation(request);
-        String tmst = request.getHeader("tmst");
-        String token = request.getHeader("token");
-        String sign = request.getHeader(HEADER_PARAM_NAME);
+        String tmst = request.getHeader(TMST_HEADER_PARAM_NAME);
+        String token = request.getHeader(TOKEN_HEADER_PARAM_NAME);
+        String sign = request.getHeader("sign");
 
         if (StringUtils.isBlank(tmst)) {
             throw new SignatureException("tmst is null or empty!");
@@ -92,7 +97,7 @@ class SignInterceptor implements AsyncHandlerInterceptor {
             SortedSet<String> names = new TreeSet<>();
             while (it.hasNext()) {
                 String hName = it.next();
-                if (!HEADER_PARAM_NAME.equals(hName)) {
+                if (ACCEPTABLE_HEADERS.contains(hName)) {
                     names.add(hName);
                 }
             }
