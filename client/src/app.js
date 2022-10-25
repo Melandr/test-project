@@ -1,11 +1,24 @@
 import "./styles.css";
-import MD5 from "crypto-js/md5";
+// import MD5 from "crypto-js/md5";
+import { HmacSHA256, SHA256, MD5 } from "crypto-js";
 import { isValid } from "./utils";
 
 const form = document.querySelector("#form");
+const wrapper = document.querySelector(".wrapper");
+const divInfo = document.querySelector(".detail-info");
+const divDate = document.querySelector(".date");
 const inputLogin = form.querySelector("#login-input");
 const inputPassword = form.querySelector("#password-input");
 const submitBtn = form.querySelector("#submit");
+
+let user = {};
+const secretKey = "ILoveMyProject";
+let token = "";
+const baseUrl = "http://localhost:8080/server-app/client";
+const authUrl = "/auth";
+const detailUrl = "/detail";
+const logoutUrl = "/logout";
+const actionUrl = "/action";
 
 form.addEventListener("submit", handleFormSubmit);
 
@@ -27,7 +40,6 @@ function serializeForm(formNode) {
   let object = {};
   data.forEach((value, key) => (object[key] = key === "password" ? MD5(value).toString() : value));
   let json = JSON.stringify(object);
-  console.log(json);
 
   return json;
 }
@@ -38,16 +50,17 @@ function toggleLoader() {
 }
 
 function onSuccess(formNode, message) {
-  alert(message.token);
   formNode.classList.toggle("hidden");
+  divInfo.innerHTML = message.token;
 }
 
 function onError(message) {
   alert(message.token);
 }
 
+//функция запроса на авторизацию
 async function sendData(data) {
-  const url = "http://localhost:8080/server-app/client/auth";
+  const url = baseUrl + authUrl;
   return await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -62,6 +75,37 @@ function checkValidity(event) {
   formNode.querySelector("button").disabled = !isValid;
 }
 
+//функция форматирования текущей даты и времени
+function formatDate() {
+  let now = new Date();
+
+  function pad(n) {
+    return n < 10 ? "0" + n : n;
+  }
+
+  return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(
+    now.getMinutes()
+  )}${pad(now.getSeconds())}`;
+}
+
+//функция создания строки сигнатуры с учетом даты, времени, адреса запроса и токена
+function createSign() {
+  const strResponse = `[${baseUrl}${detailUrl}][tmst=${formatDate()},token=${token}][]`;
+  return HmacSHA256(strResponse, secretKey).toString();
+}
+
+//функция запроса детальных данных пользователя
+async function getUserDetailInfo() {
+  const url = baseUrl + detailUrl;
+  const options = {
+    method: "GET",
+    // mode: "no-cors",
+    headers: { tmst: formatDate(), token: token, sign: createSign() },
+  };
+  return await fetch(url, options);
+}
+
+//обработчик ввода данных пароля
 form.addEventListener("input", checkValidity);
 
 async function handleFormSubmit(event) {
@@ -73,9 +117,18 @@ async function handleFormSubmit(event) {
   toggleLoader();
 
   if (response.ok) {
-    const token = await response.json();
+    const request = await response.json();
 
-    onSuccess(event.target, token);
+    token = request.token;
+    // Сохраняем данные в sessionStorage
+    sessionStorage.setItem("token", request.token);
+
+    //Создаем новый запрос
+    const responseUserInfo = await getUserDetailInfo();
+    user = await responseUserInfo.json();
+    console.log(user);
+
+    onSuccess(event.target, request);
   } else {
     const error = await response.json();
     onError(error);

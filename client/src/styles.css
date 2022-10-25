@@ -1,6 +1,6 @@
 body {
   align-items: center;
-  background-color: #000;
+  background-color: rgba(0, 204, 255, 0.829);
   display: flex;
   justify-content: center;
   height: 100vh;
@@ -13,6 +13,10 @@ body {
   height: 420px;
   padding: 20px;
   width: 320px;
+}
+
+.hidden {
+  display: none;
 }
 
 .title {
