@@ -51,7 +51,6 @@ function toggleLoader() {
 
 function onSuccess(formNode, message) {
   formNode.classList.toggle("hidden");
-  divInfo.innerHTML = message.token;
 }
 
 function onError(message) {
