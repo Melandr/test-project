@@ -95,6 +95,20 @@ a:hover {
   display: none;
 }
 
+.error {
+  display: none;
+  color: red;
+}
+
+.error.active {
+  display: inline;
+}
+
+.input.error.active {
+  border-color: hsla(0, 100%, 64%, 0.9);
+  box-shadow: 0px 0px 8px hsla(16, 100%, 50%, 0.645);
+}
+
 .title {
   color: #eee;
   font-family: sans-serif;

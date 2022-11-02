@@ -29,14 +29,16 @@
       <form class="form" id="form">
         <div class="title">Авторизация</div>
         <div class="input-container ic1">
-          <input id="login-input" name="login" class="input" type="text" placeholder=" " required />
+          <input id="login-input" name="login" class="input" type="text" placeholder=" " />
           <div class="cut"></div>
           <label for="login-input" class="placeholder">Логин</label>
+          <span class="error" id="error-login">пожалуйста, введите логин</span>
         </div>
         <div class="input-container ic2">
-          <input id="password-input" name="password" class="input" type="text" placeholder=" " required />
+          <input id="password-input" name="password" class="input" type="password" placeholder=" " />
           <div class="cut"></div>
           <label for="password-input" class="placeholder">Пароль</label>
+          <span class="error" id="error-password">пожалуйста, введите пароль</span>
         </div>
         <button type="text" class="submit" id="submit">Отправить</button>
         <div id="loader" class="hidden">Отправляем...</div>
