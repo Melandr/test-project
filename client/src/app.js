@@ -18,7 +18,6 @@ const baseUrl = "http://localhost:8080/server-app/client";
 const authUrl = "/auth";
 const detailUrl = "/detail";
 const logoutUrl = "/logout";
-const actionUrl = "/action";
 
 form.addEventListener("submit", handleFormSubmit);
 
