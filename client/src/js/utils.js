@@ -19,30 +19,12 @@ function createSign() {
 
 //Функция для сохранения токена в sessionStorage
 function saveToken(token) {
-  sessionStorage.setItem("tokenData", JSON.stringify(token));
+  sessionStorage.setItem("token", JSON.stringify(token));
 }
 
-//Функция для получения токена
-function getTokenData(login, password) {
-  return fetch("api/auth", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      login,
-      password,
-    }),
-  }).then((res) => {
-    if (res.status === 200) {
-      const tokenData = res.json();
-      saveToken(JSON.stringify(tokenData)); // сохраняем полученный токен в sessionStorage, с помощью функции, заданной ранее
-      return Promise.resolve();
-    }
-    return Promise.reject();
-  });
+//Функция чтения токена из sessionStorage
+function getToken() {
+  return sessionStorage.getItem("token");
 }
 
 //функция сборки заголовков
@@ -54,4 +36,4 @@ function buildHeaders(authorization = null) {
   return headers;
 }
 
-export { formatDate, createSign, saveToken, getTokenData, buildHeaders };
+export { formatDate, createSign, saveToken, getToken, buildHeaders };

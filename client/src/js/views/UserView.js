@@ -4,11 +4,11 @@ export class UserView {
   }
 
   renderSucess() {
-    this.container.innerHTML = "Ваше сообщение было успешно отправлено.";
+    this.container.parentNode.innerHTML = "Вы успешно авторизованы.";
   }
 
   renderFailure() {
-    this.container.innerHTML = "Произошла ошибка.";
+    this.container.parentNode.innerHTML = "Произошла ошибка.";
   }
 
   renderError(msg, attribute) {
@@ -25,7 +25,7 @@ export class UserView {
     element.blur();
   }
 
-  outError(domObject) {
+  clearError(domObject) {
     const spanError = this.container.querySelector(`#error-${domObject.getAttribute("name")}`);
 
     spanError.textContent = "";
