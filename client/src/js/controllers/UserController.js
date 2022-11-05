@@ -1,7 +1,7 @@
 import UserModel from "../models/UserModel.js";
-import { secret_key, api_url, auth_url } from "../config.js";
-import { HmacSHA256, MD5 } from "crypto-js";
-import { saveToken } from "../utils.js";
+import { secret_key, api_url, auth_url, detail_url } from "../config.js";
+import { MD5 } from "crypto-js";
+import { createSign, formatDate, saveToken, getToken } from "../utils.js";
 
 export class UserController {
   constructor(view, model) {
@@ -32,39 +32,65 @@ export class UserController {
     this.getTokenData(
       formData,
       () => this.view.renderSucess(),
-      () => this.view.renderFailure()
+      (err) => this.view.renderFailure(err)
+    );
+
+    this.getUserDetailInfo(
+      () => this.view.renderSucess(),
+      (err) => this.view.renderFailure(err)
     );
   }
 
   //Функция для получения токена
   getTokenData(data, sucess, failure) {
-    try {
-      fetch(api_url + auth_url, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(data),
-      })
-        .then(async (response) => {
-          if (response.status === 200) {
-            const request = await response.json();
-            const tokenData = request.token;
-            saveToken(JSON.stringify(tokenData));
-            sucess();
-          }
+    const url = api_url + auth_url;
 
-          if (response.status === 404) {
-            const request = await response.json();
-            throw new Error(request.detail);
-          }
-        })
-        .catch(async (err) => {
-          console.log(err);
-          failure();
-        });
-    } catch (err) {
-      console.error(`Error at fetch POST: ${err}`);
-      throw err;
-    }
+    fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then(async (response) => {
+        if (response.status === 200) {
+          const request = await response.json();
+          const tokenData = request.token;
+          saveToken(tokenData);
+          sucess();
+          this.getUserDetailInfo(sucess, failure);
+        }
+
+        if (response.status === 404) {
+          const request = await response.json();
+          throw request.detail;
+        }
+      })
+      .catch(async (err) => {
+        console.log(err);
+        failure(err);
+      });
+  }
+
+  //Функция получения детальной информации о пользователе
+  getUserDetailInfo(sucess, failure) {
+    const url = api_url + detail_url;
+    console.log(getToken());
+    const options = {
+      method: "GET",
+      headers: { tmst: formatDate(), token: getToken(), sign: createSign(url, getToken(), secret_key) },
+    };
+
+    fetch(url, options)
+      .then(async (response) => {
+        // if (response.status === 200) {
+        const request = await response.json();
+        console.log(request);
+        sucess();
+        // }
+      })
+      .catch(async (err) => {
+        console.log(err);
+        failure(err);
+      });
   }
 
   validation(domObject, typeDomObject, minlength) {

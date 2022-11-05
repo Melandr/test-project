@@ -7,8 +7,8 @@ export class UserView {
     this.container.parentNode.innerHTML = "Вы успешно авторизованы.";
   }
 
-  renderFailure() {
-    this.container.parentNode.innerHTML = "Произошла ошибка.";
+  renderFailure(err) {
+    this.container.parentNode.innerHTML = `Произошла ошибка. <br> ${err}`;
   }
 
   renderError(msg, attribute) {

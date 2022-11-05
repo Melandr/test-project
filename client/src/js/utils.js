@@ -1,3 +1,6 @@
+import { HmacSHA256 } from "crypto-js";
+
+
 //функция форматирования текущей даты и времени
 function formatDate() {
   let now = new Date();
@@ -12,8 +15,8 @@ function formatDate() {
 }
 
 //функция создания строки сигнатуры с учетом даты, времени, адреса запроса и токена
-function createSign() {
-  const strResponse = `[${baseUrl}${detailUrl}][tmst=${formatDate()},token=${token}][]`;
+function createSign(url, token, secretKey) {
+  const strResponse = `[${url}][tmst=${formatDate()},token=${token}][]`;
   return HmacSHA256(strResponse, secretKey).toString();
 }
 
