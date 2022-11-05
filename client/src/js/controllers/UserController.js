@@ -29,45 +29,85 @@ export class UserController {
       password: hashedPassword,
     };
 
-    this.getTokenData(
-      formData,
-      () => this.view.renderSucess(),
-      (err) => this.view.renderFailure(err)
-    );
+    // this.getTokenData(
+    //   formData,
+    //   () => this.view.renderSucess(),
+    //   (err) => this.view.renderFailure(err)
+    // );
 
-    this.getUserDetailInfo(
-      () => this.view.renderSucess(),
-      (err) => this.view.renderFailure(err)
-    );
+    this.getTokenData(formData);
+
+    // this.getUserDetailInfo(
+    //   () => this.view.renderSucess(),
+    //   (err) => this.view.renderFailure(err)
+    // );
   }
 
   //Функция для получения токена
-  getTokenData(data, sucess, failure) {
+  // getTokenData(data, sucess, failure) {
+  //   const url = api_url + auth_url;
+
+  //   fetch(url, {
+  //     method: "POST",
+  //     headers: { "content-type": "application/json" },
+  //     body: JSON.stringify(data),
+  //   })
+  //     .then(async (response) => {
+  //       if (response.status === 200) {
+  //         const request = await response.json();
+  //         const tokenData = request.token;
+  //         saveToken(tokenData);
+  //         sucess();
+
+  //         // this.getUserDetailInfo(sucess, failure);
+  //       }
+
+  //       if (response.status === 404) {
+  //         const request = await response.json();
+  //         throw request.detail;
+  //       }
+  //     })
+  //     .catch(async (err) => {
+  //       console.log(err);
+  //       failure(err);
+  //     });
+  // }
+
+  getTokenData(data) {
     const url = api_url + auth_url;
 
-    fetch(url, {
+    return fetch(url, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(data),
-    })
-      .then(async (response) => {
-        if (response.status === 200) {
-          const request = await response.json();
-          const tokenData = request.token;
-          saveToken(tokenData);
-          sucess();
-          this.getUserDetailInfo(sucess, failure);
-        }
+    }).then((response) => {
+      if (response.status === 200) {
+        return response
+          .json()
+          .then((request) => {
+            console.log(request);
+            const tokenData = request.token;
+            saveToken(tokenData);
+            this.view.renderSucess();
+          })
+          .catch((err) => {
+            // return Promise.reject()
+            console.log(err);
+          });
+      }
 
-        if (response.status === 404) {
-          const request = await response.json();
-          throw request.detail;
-        }
-      })
-      .catch(async (err) => {
-        console.log(err);
-        failure(err);
-      });
+      if (response.status === 404) {
+        return response.json().then((request) => {
+          console.log(request);
+          const err = request.detail;
+          this.view.renderFailure(err);
+        });
+      }
+    });
+
+    return new Promise((resolve, reject) => {
+      resolve(() => this.view.renderSucess()), reject((err) => this.view.renderFailure(err));
+    });
   }
 
   //Функция получения детальной информации о пользователе
@@ -81,11 +121,9 @@ export class UserController {
 
     fetch(url, options)
       .then(async (response) => {
-        // if (response.status === 200) {
         const request = await response.json();
         console.log(request);
         sucess();
-        // }
       })
       .catch(async (err) => {
         console.log(err);
