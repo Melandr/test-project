@@ -29,52 +29,13 @@ export class UserController {
       password: hashedPassword,
     };
 
-    // this.getTokenData(
-    //   formData,
-    //   () => this.view.renderSucess(),
-    //   (err) => this.view.renderFailure(err)
-    // );
-
-    this.getTokenData(formData);
-
-    // this.getUserDetailInfo(
-    //   () => this.view.renderSucess(),
-    //   (err) => this.view.renderFailure(err)
-    // );
+    this.getTokenData(formData).then(this.getUserDetailInfo);
   }
 
   //Функция для получения токена
-  // getTokenData(data, sucess, failure) {
-  //   const url = api_url + auth_url;
-
-  //   fetch(url, {
-  //     method: "POST",
-  //     headers: { "content-type": "application/json" },
-  //     body: JSON.stringify(data),
-  //   })
-  //     .then(async (response) => {
-  //       if (response.status === 200) {
-  //         const request = await response.json();
-  //         const tokenData = request.token;
-  //         saveToken(tokenData);
-  //         sucess();
-
-  //         // this.getUserDetailInfo(sucess, failure);
-  //       }
-
-  //       if (response.status === 404) {
-  //         const request = await response.json();
-  //         throw request.detail;
-  //       }
-  //     })
-  //     .catch(async (err) => {
-  //       console.log(err);
-  //       failure(err);
-  //     });
-  // }
-
   getTokenData(data) {
     const url = api_url + auth_url;
+    let token = "";
 
     return fetch(url, {
       method: "POST",
@@ -82,53 +43,40 @@ export class UserController {
       body: JSON.stringify(data),
     }).then((response) => {
       if (response.status === 200) {
-        return response
-          .json()
-          .then((request) => {
-            console.log(request);
-            const tokenData = request.token;
-            saveToken(tokenData);
-            this.view.renderSucess();
-          })
-          .catch((err) => {
-            // return Promise.reject()
-            console.log(err);
-          });
+        return response.json().then((request) => {
+          const tokenData = request.token;
+          token = tokenData;
+          saveToken(tokenData);
+          console.log("Token in getTokenData = " + getToken());
+          this.view.renderSucess();
+        });
       }
 
       if (response.status === 404) {
         return response.json().then((request) => {
-          console.log(request);
+          // console.log(request);
           const err = request.detail;
           this.view.renderFailure(err);
         });
       }
     });
-
-    return new Promise((resolve, reject) => {
-      resolve(() => this.view.renderSucess()), reject((err) => this.view.renderFailure(err));
-    });
   }
 
   //Функция получения детальной информации о пользователе
-  getUserDetailInfo(sucess, failure) {
+  getUserDetailInfo() {
     const url = api_url + detail_url;
-    console.log(getToken());
+
     const options = {
       method: "GET",
       headers: { tmst: formatDate(), token: getToken(), sign: createSign(url, getToken(), secret_key) },
     };
+    console.log("Token in getUserDetailInfo = " + options.headers.token);
 
-    fetch(url, options)
-      .then(async (response) => {
-        const request = await response.json();
+    return fetch(url, options).then((response) => {
+      return response.json().then((request) => {
         console.log(request);
-        sucess();
-      })
-      .catch(async (err) => {
-        console.log(err);
-        failure(err);
       });
+    });
   }
 
   validation(domObject, typeDomObject, minlength) {
