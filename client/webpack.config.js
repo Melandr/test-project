@@ -5,6 +5,7 @@ const webpack = require("webpack");
 
 module.exports = {
   entry: "./src/js/index.js",
+  // entry: "./src/app.js",
   output: {
     filename: "bundle.[chunkhash].js",
     path: path.resolve(__dirname, "public"),

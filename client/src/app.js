@@ -1,7 +1,6 @@
-import "./styles.css";
+import "./css/styles.css";
 // import MD5 from "crypto-js/md5";
 import { HmacSHA256, SHA256, MD5 } from "crypto-js";
-import { isValid } from "./utils";
 
 const form = document.querySelector("#form");
 const wrapper = document.querySelector(".wrapper");
@@ -110,9 +109,9 @@ async function handleFormSubmit(event) {
   event.preventDefault();
   const data = serializeForm(event.target);
 
-  toggleLoader();
+  // toggleLoader();
   const response = await sendData(data);
-  toggleLoader();
+  // toggleLoader();
 
   if (response.ok) {
     const request = await response.json();

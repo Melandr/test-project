@@ -3,12 +3,16 @@ export class UserView {
     this.container = container;
   }
 
-  renderSucess() {
-    this.container.parentNode.innerHTML = "Вы успешно авторизованы.";
+  // renderSucess() {
+  //   this.container.innerHTML = "Вы успешно авторизованы.";
+  // }
+
+  renderSucess(userName) {
+    this.container.innerHTML = `${userName},<br>Вы успешно авторизованы.`;
   }
 
   renderFailure(err) {
-    this.container.parentNode.innerHTML = `Произошла ошибка. <br> ${err}`;
+    this.container.innerHTML = `Произошла ошибка. <br> ${err}`;
   }
 
   renderError(msg, attribute) {

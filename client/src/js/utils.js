@@ -1,6 +1,5 @@
 import { HmacSHA256 } from "crypto-js";
 
-
 //функция форматирования текущей даты и времени
 function formatDate() {
   let now = new Date();
@@ -22,7 +21,7 @@ function createSign(url, token, secretKey) {
 
 //Функция для сохранения токена в sessionStorage
 function saveToken(token) {
-  sessionStorage.setItem("token", JSON.stringify(token));
+  sessionStorage.setItem("token", token);
 }
 
 //Функция чтения токена из sessionStorage
@@ -30,13 +29,4 @@ function getToken() {
   return sessionStorage.getItem("token");
 }
 
-//функция сборки заголовков
-function buildHeaders(authorization = null) {
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: authorization ? authorization : "Bearer TOKEN_MISSING",
-  };
-  return headers;
-}
-
-export { formatDate, createSign, saveToken, getToken, buildHeaders };
+export { formatDate, createSign, saveToken, getToken };

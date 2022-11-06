@@ -10,7 +10,7 @@ const fields = form.querySelectorAll("[name]");
 
 //экземпляры модулей
 const userModel = new UserModel();
-const userView = new UserView(form);
+const userView = new UserView(form.parentNode);
 const userController = new UserController(userView, userModel);
 
 //обработчик отправки формы

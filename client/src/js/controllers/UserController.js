@@ -29,37 +29,49 @@ export class UserController {
       password: hashedPassword,
     };
 
-    this.getTokenData(formData).then(this.getUserDetailInfo);
+    this.getTokenData(formData)
+      .then(this.getUserDetailInfo.bind(this))
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //Функция для получения токена
   getTokenData(data) {
     const url = api_url + auth_url;
-    let token = "";
 
-    return fetch(url, {
+    const options = {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(data),
-    }).then((response) => {
-      if (response.status === 200) {
-        return response.json().then((request) => {
-          const tokenData = request.token;
-          token = tokenData;
-          saveToken(tokenData);
-          console.log("Token in getTokenData = " + getToken());
-          this.view.renderSucess();
-        });
-      }
+    };
 
-      if (response.status === 404) {
-        return response.json().then((request) => {
-          // console.log(request);
-          const err = request.detail;
-          this.view.renderFailure(err);
-        });
-      }
-    });
+    return fetch(url, options)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json().then((request) => {
+            const tokenData = request.token;
+            saveToken(tokenData);
+          });
+        }
+
+        if (response.status === 404) {
+          return response
+            .json()
+            .then((request) => {
+              const err = request.detail;
+              this.view.renderFailure(err);
+              throw new Error(err);
+            })
+            .catch((err) => {
+              throw err;
+              // return Promise.reject(new Error(error.detail));
+            });
+        }
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 
   //Функция получения детальной информации о пользователе
@@ -70,12 +82,14 @@ export class UserController {
       method: "GET",
       headers: { tmst: formatDate(), token: getToken(), sign: createSign(url, getToken(), secret_key) },
     };
-    console.log("Token in getUserDetailInfo = " + options.headers.token);
 
     return fetch(url, options).then((response) => {
-      return response.json().then((request) => {
-        console.log(request);
-      });
+      if (response.status === 200) {
+        return response.json().then((request) => {
+          const login = request.name;
+          this.view.renderSucess(login);
+        });
+      }
     });
   }
 
