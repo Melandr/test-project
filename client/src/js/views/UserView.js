@@ -3,11 +3,7 @@ export class UserView {
     this.container = container;
   }
 
-  // renderSucess() {
-  //   this.container.innerHTML = "Вы успешно авторизованы.";
-  // }
-
-  renderSucess(userName) {
+  renderSucess(userName = "") {
     this.container.innerHTML = `${userName},<br>Вы успешно авторизованы.`;
   }
 
@@ -31,6 +27,9 @@ export class UserView {
 
   clearError(domObject) {
     const spanError = this.container.querySelector(`#error-${domObject.getAttribute("name")}`);
+    const btnSubmit = this.container.querySelector("button");
+
+    btnSubmit.disabled = false;
 
     spanError.textContent = "";
     spanError.classList.remove("active");

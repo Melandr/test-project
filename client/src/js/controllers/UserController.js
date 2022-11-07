@@ -1,21 +1,25 @@
 import UserModel from "../models/UserModel.js";
 import { secret_key, api_url, auth_url, detail_url } from "../config.js";
 import { MD5 } from "crypto-js";
-import { createSign, formatDate, saveToken, getToken } from "../utils.js";
+import { createSign, formatDate, saveToken, getToken, validation } from "../utils.js";
 
 export class UserController {
   constructor(view, model) {
     this.view = view;
     this.model = model;
+    this.getUserDetailInfo = this.getUserDetailInfo.bind(this);
   }
 
   submit(dataDOM) {
     const fields = [...dataDOM.querySelectorAll("[name]")];
+    const btnSubmit = dataDOM.querySelector("button");
 
-    //проверяем поля на количество символов
-    // fields.forEach((field) => {
-    //   let minlength = 3;
-    // });
+    // проверяем поля на количество символов
+    fields.forEach((field) => {
+      let minlength = 3;
+
+      this.validation(field.value, field.getAttribute("name"), minlength);
+    });
 
     if (fields.every((field) => field.classList.contains("error"))) return console.log("Что-то пошло не так...");
 
@@ -30,7 +34,7 @@ export class UserController {
     };
 
     this.getTokenData(formData)
-      .then(this.getUserDetailInfo.bind(this))
+      .then(this.getUserDetailInfo())
       .catch((err) => {
         console.log(err);
       });
@@ -95,7 +99,7 @@ export class UserController {
 
   validation(domObject, typeDomObject, minlength) {
     try {
-      this.service.validation(domObject, typeDomObject, minlength);
+      validation(domObject, typeDomObject, minlength);
     } catch (e) {
       this.view.renderError(e.message, typeDomObject);
     }

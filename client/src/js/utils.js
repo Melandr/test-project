@@ -29,4 +29,12 @@ function getToken() {
   return sessionStorage.getItem("token");
 }
 
-export { formatDate, createSign, saveToken, getToken };
+function validation(value, typeDomObject, minlength) {
+  if (!value) throw new Error(`Пожалуйста, заполните поле ${typeDomObject}`);
+
+  if (value.length <= parseInt(minlength) && typeDomObject === "password") {
+    throw new Error(`Пожалуйста, заполните поле ${typeDomObject} минимум ${minlength} символов`);
+  }
+}
+
+export { formatDate, createSign, saveToken, getToken, validation };

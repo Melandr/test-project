@@ -86,7 +86,7 @@ a:hover {
   background-color: #15172b;
   border-radius: 20px;
   box-sizing: border-box;
-  height: 360px;
+  min-height: 360px;
   padding: 20px;
   width: 320px;
 }
@@ -101,12 +101,17 @@ a:hover {
 }
 
 .error.active {
-  display: inline;
+  display: inline-block;
 }
 
 .input.error.active {
   border-color: hsla(0, 100%, 64%, 0.9);
   box-shadow: 0px 0px 8px hsla(16, 100%, 50%, 0.645);
+}
+
+#error-login,
+#error-password {
+  margin: 10px;
 }
 
 .title {
