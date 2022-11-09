@@ -1,7 +1,6 @@
 export class UserView {
     constructor(container) {
         this.container = container;
-        console.log(this.container);
     }
 
     renderSucess(userName = "") {
@@ -36,7 +35,13 @@ export class UserView {
         domObject.classList.remove("active");
     }
 
-    getFormData(){
-        
+    getFormData() {
+        const from_login = this.container.querySelector('[name="login"]').value;
+        const from_password = this.container.querySelector('[name="password"]').value;
+
+        return {
+            from_login,
+            from_password,
+        };
     }
 }

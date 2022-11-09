@@ -1,5 +1,5 @@
 import UserModel from "../models/UserModel.js";
-import { secret_key, api_url, auth_url, detail_url } from "../config.js";
+import { secret_key, api_url, auth_url, detail_url, proxy_url } from "../config.js";
 import { MD5 } from "crypto-js";
 import { createSign, formatDate, saveToken, getToken, validation } from "../utils.js";
 
@@ -24,9 +24,9 @@ export class UserController {
             if (fields.every((field) => field.classList.contains("error")))
                 return console.log("Что-то пошло не так...");
 
-            const from_login = dataDOM.querySelector('[name="login"]').value;
-            const from_password = dataDOM.querySelector('[name="password"]').value;
-
+            //получаем данные из полей формы
+            const { from_login, from_password } = this.view.getFormData();
+            //получаем хэшированный
             const hashedPassword = MD5(from_password).toString();
 
             const formData = {
@@ -46,7 +46,7 @@ export class UserController {
 
     //Функция для получения токена
     getTokenData(data) {
-        const url = api_url + auth_url;
+        const url = proxy_url + auth_url;
 
         const options = {
             method: "POST",
@@ -84,11 +84,15 @@ export class UserController {
 
     //Функция получения детальной информации о пользователе
     getUserDetailInfo() {
-        const url = api_url + detail_url;
+        const url = proxy_url + detail_url;
 
         const options = {
             method: "GET",
-            headers: { tmst: formatDate(), token: getToken(), sign: createSign(url, getToken(), secret_key) },
+            headers: {
+                tmst: formatDate(),
+                token: getToken(),
+                sign: createSign(api_url + detail_url, getToken(), secret_key),
+            },
         };
 
         return fetch(url, options).then((response) => {
