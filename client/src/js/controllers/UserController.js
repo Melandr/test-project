@@ -1,13 +1,11 @@
-import UserModel from "../models/UserModel.js";
-import { secret_key, api_url, auth_url, detail_url, proxy_url } from "../config.js";
 import { MD5 } from "crypto-js";
 import { createSign, formatDate, saveToken, getToken, validation } from "../utils.js";
 
 export class UserController {
-    constructor(view, model) {
+    constructor(view, service, model) {
         this.view = view;
+        this.service = service;
         this.model = model;
-        this.getUserDetailInfo = this.getUserDetailInfo.bind(this);
     }
 
     submit(dataDOM) {
@@ -34,75 +32,15 @@ export class UserController {
                 password: hashedPassword,
             };
 
-            this.getTokenData(formData)
-                .then(this.getUserDetailInfo())
+            this.service
+                .getTokenData(formData, (err) => this.view.renderFailure(err))
+                .then(this.service.getUserDetailInfo((name) => this.view.renderSucess(name)))
                 .catch((err) => {
                     return false;
                 });
         } catch (err) {
             return false;
         }
-    }
-
-    //Функция для получения токена
-    getTokenData(data) {
-        const url = proxy_url + auth_url;
-
-        const options = {
-            method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify(data),
-        };
-
-        return fetch(url, options)
-            .then((response) => {
-                if (response.status === 200) {
-                    return response.json().then((request) => {
-                        const tokenData = request.token;
-                        saveToken(tokenData);
-                    });
-                }
-
-                if (response.status === 404) {
-                    return response
-                        .json()
-                        .then((request) => {
-                            const err = request.detail;
-                            this.view.renderFailure(err);
-                            throw new Error(err);
-                        })
-                        .catch((err) => {
-                            throw err;
-                            // return Promise.reject(new Error(error.detail));
-                        });
-                }
-            })
-            .catch((err) => {
-                throw err;
-            });
-    }
-
-    //Функция получения детальной информации о пользователе
-    getUserDetailInfo() {
-        const url = proxy_url + detail_url;
-
-        const options = {
-            method: "GET",
-            headers: {
-                tmst: formatDate(),
-                token: getToken(),
-                sign: createSign(api_url + detail_url, getToken(), secret_key),
-            },
-        };
-
-        return fetch(url, options).then((response) => {
-            if (response.status === 200) {
-                return response.json().then((request) => {
-                    const login = request.name;
-                    this.view.renderSucess(login);
-                });
-            }
-        });
     }
 
     validation(domObject, typeDomObject, minlength) {
