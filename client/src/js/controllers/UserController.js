@@ -34,7 +34,7 @@ export class UserController {
 
             this.service
                 .getTokenData(formData, (err) => this.view.renderFailure(err))
-                .then(this.service.getUserDetailInfo((name) => this.view.renderSucess(name)))
+                .then(() => this.service.getUserDetailInfo((name) => this.view.renderSucess(name)))
                 .catch((err) => {
                     return false;
                 });
