@@ -18,31 +18,14 @@ export class UserService {
         return fetch(url, options)
             .then((response) => {
                 if (response.status === 200) {
-                    return response.json().then((request) => {
-                        const tokenData = request.token;
-                        saveToken(tokenData);
-                        console.log(tokenData);
-                    });
+                    return response.json().then(data => data.token);
                 }
-
-                if (response.status === 404) {
-                    return response
-                        .json()
-                        .then((request) => {
-                            const err = request.detail;
-                            failure(err);
-
-                            throw new Error(err);
-                        })
-                        .catch((err) => {
-                            throw err;
-                            // return Promise.reject(new Error(error.detail));
-                        });
-                }
+                return response.json().then((data) => {
+                    throw new Error(data.detail);
+                });
             })
-            .catch((err) => {
-                throw err;
-            });
+            .then((token) => saveToken(token))
+            .catch((err) => failure(err.message));
     }
 
     //Функция получения детальной информации о пользователе
