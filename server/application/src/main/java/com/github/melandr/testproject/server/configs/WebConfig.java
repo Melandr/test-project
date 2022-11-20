@@ -38,18 +38,17 @@ class WebConfig implements WebMvcConfigurer {
     public FilterRegistrationBean<LogRequestFilter> createLogRequestFilterBean() {
         LogRequestFilter mdcFilter = new LogRequestFilter();
         FilterRegistrationBean<LogRequestFilter> registrationBean = new FilterRegistrationBean<>(mdcFilter);
-        registrationBean.addUrlPatterns("/client/*");
+        registrationBean.addUrlPatterns("/client/*", "/role/*");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return registrationBean;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(signInterceptor).addPathPatterns("/client/**").excludePathPatterns("/client/auth")
-                .order(1);
-        registry.addInterceptor(tokenLiveInterceptor).addPathPatterns("/client/**")
-                .excludePathPatterns("/client/auth", "/client/logout")
-                .order(2);
+        registry.addInterceptor(signInterceptor).addPathPatterns("/client/**").addPathPatterns("/role/**")
+                .excludePathPatterns("/client/auth").order(1);
+        registry.addInterceptor(tokenLiveInterceptor).addPathPatterns("/client/**").addPathPatterns("/role/**")
+                .excludePathPatterns("/client/auth", "/client/logout").order(2);
     }
 
     @Override

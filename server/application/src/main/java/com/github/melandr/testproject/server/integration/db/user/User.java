@@ -1,4 +1,4 @@
-package com.github.melandr.testproject.server.integration.user;
+package com.github.melandr.testproject.server.integration.db.user;
 
 import com.github.melandr.testproject.server.protocol.user.UserI;
 
