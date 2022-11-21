@@ -24,15 +24,15 @@ class UserProvider implements UserProviderI {
     public UserI getUserByLogin(String login) {
         return template.query(con -> {
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT login, password, first_name, last_name, middle_name FROM users WHERE login LIKE ?");
+                    "select LOGIN, PASSWORD, FIRST_NAME, LAST_NAME, MIDDLE_NAME from USERS where LOGIN like ?");
             ps.setString(1, login);
             return ps;
         }, rs -> {
             User user = null;
             if(rs.next()) {
-                user = new User(rs.getString("login"), rs.getString("password").getBytes(StandardCharsets.UTF_8),
-                        StringUtils.join(new String[] { rs.getString("first_name"), rs.getString("last_name"),
-                                rs.getString("middle_name") }, " "));
+                user = new User(rs.getString("LOGIN"), rs.getString("PASSWORD").getBytes(StandardCharsets.UTF_8),
+                        StringUtils.join(new String[] { rs.getString("FIRST_NAME"), rs.getString("LAST_NAME"),
+                                rs.getString("MIDDLE_NAME") }, " "));
             }
             return user;
         });

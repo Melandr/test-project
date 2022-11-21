@@ -19,30 +19,31 @@ public class DBInitiator implements InitializingBean {
     }
 
     private void initCategoryTable() {
-        template.execute("CREATE TABLE IF NOT EXISTS roles(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL)");
+        template.execute(
+                "create table if not exists ROLES(ID int auto_increment primary key, NAME varchar(255) not null unique)");
     }
 
     private void initUsersTable() {
-        template.execute("CREATE TABLE IF NOT EXISTS users("
-                + " id INT AUTO_INCREMENT PRIMARY KEY,"
-                + " login VARCHAR(255) NOT NULL,"
-                + " password VARCHAR(255) DEFAULT '12345' NOT NULL,"
-                + " first_name VARCHAR(255) NOT NULL,"
-                + " last_name VARCHAR(255) NOT NULL,"
-                + " middle_name VARCHAR(255) NOT NULL,"
-                + " phone VARCHAR(13),"
-                + " email VARCHAR(50),"
-                + " photo BLOB(10K)"
-                + ");");
+        template.execute("create table if not exists USERS("
+                + " ID int auto_increment primary key,"
+                + " LOGIN varchar(255) not null unique,"
+                + " PASSWORD varchar(255) default '12345' not null,"
+                + " FIRST_NAME varchar(255) not null,"
+                + " LAST_NAME varchar(255) not null,"
+                + " MIDDLE_NAME varchar(255) not null,"
+                + " PHONE varchar(13),"
+                + " EMAIL varchar(50),"
+                + " PHOTO blob(10K)"
+                + ")");
     }
 
     private void initUserToCategoryTable() {
-        template.execute("CREATE TABLE IF NOT EXISTS user_to_role("
-                + " id INT AUTO_INCREMENT PRIMARY KEY,"
-                + " user_id INT NOT NULL,"
-                + " role_id INT NOT NULL,"
-                + " FOREIGN KEY (user_id) REFERENCES users(id),"
-                + " FOREIGN KEY (role_id) REFERENCES roles(id)"
-                + ");");
+        template.execute("create table if not exists USER_TO_ROLE("
+                + " ID int auto_increment primary key,"
+                + " USER_ID int not null,"
+                + " ROLE_ID int not null,"
+                + " foreign key (USER_ID) references USERS(ID),"
+                + " foreign key (ROLE_ID) references ROLES(ID)"
+                + ")");
     }
 }
