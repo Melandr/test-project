@@ -1,4 +1,4 @@
-package com.github.melandr.testproject.server.services.categories;
+package com.github.melandr.testproject.server.services.role;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ class Dto {
 
     @AllArgsConstructor
     static class RolesResponse {
+        @JsonProperty
         private final List<Role> categories;
     }
 

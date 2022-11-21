@@ -1,4 +1,4 @@
-package com.github.melandr.testproject.server.services.categories;
+package com.github.melandr.testproject.server.services.role;
 
 import java.util.List;
 import java.util.stream.Collectors;
