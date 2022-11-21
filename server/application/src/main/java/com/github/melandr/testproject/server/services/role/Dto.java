@@ -14,7 +14,7 @@ class Dto {
     @AllArgsConstructor
     static class RolesResponse {
         @JsonProperty
-        private final List<Role> categories;
+        private final List<Role> roles;
     }
 
     @AllArgsConstructor
