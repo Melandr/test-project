@@ -34,14 +34,14 @@ export class UserService {
     //Функция получения детальной информации о пользователе
     getUserDetailInfo(sucess) {
         const url = proxy_url + detail_url;
-        const token = getToken();
+        // const token = getToken();
 
         const options = {
             method: "GET",
             headers: {
                 tmst: formatDate(),
-                token: token,
-                sign: createSign(api_url + detail_url, token, secret_key),
+                token: getToken(),
+                sign: createSign(api_url + detail_url, getToken(), secret_key),
             },
         };
 
