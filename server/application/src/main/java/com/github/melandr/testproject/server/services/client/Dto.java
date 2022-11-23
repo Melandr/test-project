@@ -1,5 +1,7 @@
 package com.github.melandr.testproject.server.services.client;
 
+import java.util.Set;
+
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,5 +34,7 @@ class Dto {
     static class UserResponse {
         @JsonProperty
         String name;
+        @JsonProperty
+        Set<String> roles;
     }
 }

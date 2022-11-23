@@ -51,4 +51,18 @@ class RoleProvider implements RoleProviderI {
         });
     }
 
+    @Override
+    public List<RoleI> getRoles(int userId) {
+        return template.query(con -> {
+            PreparedStatement ps = con.prepareStatement(
+                    "select U.ID, U.NAME from USER_TO_ROLE as UR join ROLES as U on U.ID = UR.ROLE_ID where UR.USER_ID = ?");
+            ps.setInt(1, userId);
+            return ps;
+        }, new RowMapper<RoleI>() {
+            @Override
+            public RoleI mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Role(rs.getInt("ID"), rs.getString("NAME"));
+            }
+        });
+    }
 }
