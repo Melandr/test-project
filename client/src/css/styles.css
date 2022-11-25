@@ -10,7 +10,7 @@ a:hover {
     text-decoration: none;
 }
 
-.navbar {
+.nav-container {
     position: relative;
     display: flex;
     flex-wrap: nowrap;
@@ -21,7 +21,7 @@ a:hover {
     background-color: #08d;
 }
 
-.nav-container {
+.navbar {
     display: flex;
     flex: 0 0 auto;
     flex-wrap: inherit;
