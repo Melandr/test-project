@@ -5,6 +5,9 @@ body {
     justify-content: center;
     height: 100vh;
 }
+#app {
+    display: flex;
+}
 
 a:hover {
     text-decoration: none;

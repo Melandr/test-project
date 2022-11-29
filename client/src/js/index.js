@@ -4,40 +4,59 @@ import { UserController } from "./controllers/UserController";
 import { UserService } from "./services/UserService";
 import { UserModel } from "./models/UserModel";
 import { UserView } from "./views/UserView";
+import Router, { render } from "./services/Router";
 
-//DOM
-const form = document.querySelector("#form");
-const fields = form.querySelectorAll("[name]");
-
-//экземпляры модулей
-const userModel = new UserModel();
-const userService = new UserService();
-const userView = new UserView(form.parentNode);
-const userController = new UserController(userView, userService, userModel);
+//страницы
+import Home from "./views/pages/Home.js";
+import NotFound from "./views/pages/NotFound.js";
 
 //обработчик при открытии страницы
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-        if (sessionStorage.getItem("token")) {
-            sessionStorage.removeItem("token");
-        }
-    },
-    false
-);
+document.addEventListener("DOMContentLoaded", ready);
 
-//обработчик отправки формы
-form.addEventListener("submit", submitForm);
+function ready() {
+    //устанавливаем маршруты для Router
+    const routes = {
+        "/": Home,
+        // "/about": About,
+        // "/gists": Gists,
+    };
 
-function submitForm(evt) {
-    evt.preventDefault();
+    Router.init(document.querySelector(".app"), routes, NotFound);
 
-    userController.submit(evt.currentTarget);
-}
+    render(new URL(window.location.href).pathname);
 
-//удаление класса ошибки из полей формы
-fields.forEach((field) => field.addEventListener("focus", clearError));
+    window.addEventListener("popstate", (e) => {
+        render(new URL(window.location.href).pathname);
+    });
 
-function clearError(evt) {
-    userController.clearError(evt.currentTarget);
+    //Удаляем токен из sessionStorage
+    if (sessionStorage.getItem("token")) {
+        sessionStorage.removeItem("token");
+    }
+
+    //DOM
+    const form = document.querySelector("#form");
+    const fields = form.querySelectorAll("[name]");
+
+    //экземпляры модулей
+    const userModel = new UserModel();
+    const userService = new UserService();
+    const userView = new UserView(form.parentNode);
+    const userController = new UserController(userView, userService, userModel);
+
+    //обработчик отправки формы
+    form.addEventListener("submit", submitForm);
+
+    function submitForm(evt) {
+        evt.preventDefault();
+
+        userController.submit(evt.currentTarget);
+    }
+
+    //удаление класса ошибки из полей формы
+    fields.forEach((field) => field.addEventListener("focus", clearError));
+
+    function clearError(evt) {
+        userController.clearError(evt.currentTarget);
+    }
 }

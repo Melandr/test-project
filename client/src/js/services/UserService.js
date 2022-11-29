@@ -48,6 +48,7 @@ export class UserService {
         return fetch(url, options).then((response) => {
             if (response.status === 200) {
                 return response.json().then((request) => {
+                    console.log(response);
                     const name = request.name;
                     sucess(name);
                 });
