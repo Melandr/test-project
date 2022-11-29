@@ -1,9 +1,11 @@
 import NavBar from "../components/NavBar.js";
-import AuthForm from "../components/AuthForm.js";
 
 export default () => {
     return `
     ${NavBar()}
-    ${AuthForm()}
+    <div class="home">
+        <h2>Приветствуем Вас в системе управления доступом</h2>
+        <p>для продолжения работы необходимо авторизоваться в системе</p>
+    </div>
     `;
 };

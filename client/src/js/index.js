@@ -9,6 +9,10 @@ import Router, { render } from "./services/Router";
 //страницы
 import Home from "./views/pages/Home.js";
 import NotFound from "./views/pages/NotFound.js";
+import About from "./views/pages/About.js";
+import Services from "./views/pages/Services.js";
+import Contacts from "./views/pages/Contacts.js";
+import Auth from "./views/pages/Auth.js";
 
 //обработчик при открытии страницы
 document.addEventListener("DOMContentLoaded", ready);
@@ -17,11 +21,16 @@ function ready() {
     //устанавливаем маршруты для Router
     const routes = {
         "/": Home,
-        // "/about": About,
-        // "/gists": Gists,
+        "/login": Auth,
+        // "/register": Register,
+        "/about": About,
+        "/services": Services,
+        "/contacts": Contacts,
     };
 
-    Router.init(document.querySelector(".app"), routes, NotFound);
+    const app = document.querySelector(".app");
+
+    Router.init(app, routes, NotFound);
 
     render(new URL(window.location.href).pathname);
 
@@ -35,17 +44,17 @@ function ready() {
     }
 
     //DOM
-    const form = document.querySelector("#form");
-    const fields = form.querySelectorAll("[name]");
+    // const form = document.querySelector("#form");
+    // const fields = form.querySelectorAll("[name]");
 
     //экземпляры модулей
     const userModel = new UserModel();
     const userService = new UserService();
-    const userView = new UserView(form.parentNode);
+    const userView = new UserView(app);
     const userController = new UserController(userView, userService, userModel);
 
     //обработчик отправки формы
-    form.addEventListener("submit", submitForm);
+    // form.addEventListener("submit", submitForm);
 
     function submitForm(evt) {
         evt.preventDefault();
@@ -54,7 +63,7 @@ function ready() {
     }
 
     //удаление класса ошибки из полей формы
-    fields.forEach((field) => field.addEventListener("focus", clearError));
+    // fields.forEach((field) => field.addEventListener("focus", clearError));
 
     function clearError(evt) {
         userController.clearError(evt.currentTarget);
