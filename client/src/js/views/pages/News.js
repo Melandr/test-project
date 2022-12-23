@@ -4,7 +4,7 @@ export default () => {
     return `
     ${NavBar()}
     <div class="home">
-        <h2>Сервисы</h2>
+        <h2>Новости</h2>
     </div>
     `;
 };

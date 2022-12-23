@@ -28,6 +28,7 @@ module.exports = {
         client: {
             logging: "info",
         },
+        historyApiFallback: true,
     },
     plugins: [
         new HTMLPlugin({

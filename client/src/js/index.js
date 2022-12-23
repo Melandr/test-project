@@ -13,6 +13,7 @@ import About from "./views/pages/About.js";
 import Services from "./views/pages/Services.js";
 import Contacts from "./views/pages/Contacts.js";
 import Auth from "./views/pages/Auth.js";
+import News from "./views/pages/News";
 
 //обработчик при открытии страницы
 document.addEventListener("DOMContentLoaded", ready);
@@ -26,6 +27,7 @@ function ready() {
         "/about": About,
         "/services": Services,
         "/contacts": Contacts,
+        "/news": News,
     };
 
     const app = document.querySelector(".app");

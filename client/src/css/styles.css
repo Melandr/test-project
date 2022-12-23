@@ -225,3 +225,8 @@ h2 {
 .submit:active {
     background-color: #06b;
 }
+
+.not-found {
+    color: #dc2f55;
+    text-align: center;
+}
