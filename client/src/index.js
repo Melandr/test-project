@@ -1,19 +1,19 @@
 import "../css/styles.css";
 //модули
-import { UserController } from "./controllers/UserController";
-import { UserService } from "./services/UserService";
-import { UserModel } from "./models/UserModel";
-import { UserView } from "./views/UserView";
-import Router, { render } from "./services/Router";
+import { UserController } from "./js/controllers/UserController";
+import { UserService } from "./js/services/UserService";
+import { UserModel } from "./js/models/UserModel";
+import { UserView } from "./js/views/UserView";
+import Router, { render } from "./js/services/Router";
 
 //страницы
-import Home from "./views/pages/Home.js";
-import NotFound from "./views/pages/NotFound.js";
-import About from "./views/pages/About.js";
-import Services from "./views/pages/Services.js";
-import Contacts from "./views/pages/Contacts.js";
-import Auth from "./views/pages/Auth.js";
-import News from "./views/pages/News";
+import Home from "./js/views/pages/Home.js";
+import NotFound from "./js/views/pages/NotFound.js";
+import About from "./js/views/pages/About.js";
+import Services from "./js/views/pages/Services.js";
+import Contacts from "./js/views/pages/Contacts.js";
+import Auth from "./js/views/pages/Auth.js";
+import News from "./js/views/pages/News";
 
 //обработчик при открытии страницы
 document.addEventListener("DOMContentLoaded", ready);
