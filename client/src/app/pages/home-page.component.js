@@ -48,6 +48,5 @@ export const homePageComponent = new HomePageComponent({
     </div>
     `,
     styles: `
-        .home__block {margin-top: 40px;}
     `,
 });
