@@ -1,8 +1,29 @@
-import { WFMComponent } from "framework";
+import { WFMComponent, router } from "framework";
 
 class LoginPageComponent extends WFMComponent {
     constructor(config) {
         super(config);
+
+        this.data = {
+            linkTitle: "Перейти на главную",
+        };
+    }
+
+    events() {
+        return {
+            "click .js-link": "goToHome",
+            "click .submit": "sendForm",
+        };
+    }
+
+    goToHome(event) {
+        event.preventDefault();
+        router.navigate("");
+    }
+
+    sendForm(event) {
+        event.preventDefault();
+        console.log("Send form");
     }
 }
 
@@ -27,9 +48,12 @@ export const loginPageComponent = new LoginPageComponent({
             <button type="text" class="submit" id="submit">Отправить</button>
             <div id="loader" class="hidden">Отправляем...</div>
         </form>
-    </div>    
+    </div>
+        <div class="link__block">
+            <a href="#not-existing-path" class="js-link nav__link">{{linkTitle}}</a>  
+        </div>        
     `,
     styles: `
-
+        .link__block {display: flex; justify-content: center; margin-top: 30px;}
     `,
 });
