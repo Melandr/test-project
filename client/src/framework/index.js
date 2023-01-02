@@ -7,6 +7,6 @@ import { _ } from "./tools/util";
 import { $ } from "./tools/dom";
 import { http } from "./tools/http";
 import { EventEmitter } from "./tools/event-emitter";
-import { router } from "./core/routing/router";
+import { Router } from "./core/routing/router";
 
-export { WFMModule, WFMComponent, WFMDirective, WFMPipe, EventEmitter, bootstrap, _, $, http, router };
+export { WFMModule, WFMComponent, WFMDirective, WFMPipe, EventEmitter, bootstrap, _, $, http, Router };

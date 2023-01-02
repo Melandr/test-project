@@ -1,4 +1,4 @@
-import { WFMComponent, router } from "framework";
+import { WFMComponent, Router } from "framework";
 
 class LoginPageComponent extends WFMComponent {
     constructor(config) {

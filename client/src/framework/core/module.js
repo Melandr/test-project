@@ -12,7 +12,7 @@ export class Module {
         this.directives = config.directives;
         this.pipes = config.pipes;
 
-        this.dispatcher = new EventEmitter();
+        this.dispatcher = new EventEmitter(this);
     }
 
     start() {
@@ -22,8 +22,8 @@ export class Module {
         initRouting(this.routes, this.dispatcher);
         initDirectives(this.directives);
 
-        this.dispatcher.on("routing.change-page", () => {
-            initDirectives(this.directives);
-        });
+        // this.dispatcher.on("routing.change-page", () => {
+        //     initDirectives(this.directives);
+        // });
     }
 }
