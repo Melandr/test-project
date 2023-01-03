@@ -22,16 +22,17 @@ export class Router {
      * @returns {VanillaRouter} reference to itself.
      */
     listen() {
-        this.routeHash = Object.keys(this.options.routes);
+        const routs = this.options.routes.map((route) => route.path);
 
-        if (!this.routeHash.includes("/")) throw TypeError("No home route found");
+        this.routeHash = Object.values(routs);
+
+        // if (!this.routeHash.includes("/")) throw TypeError("No home route found");
 
         if (this.isHashRouter) {
             window.addEventListener("hashchange", this._hashChanged.bind(this));
             defer(() => this._tryNav(document.location.hash.substring(1)));
         } else {
             let href = document.location.origin;
-
             if (this._findRoute(document.location.pathname)) {
                 href += document.location.pathname;
             }
@@ -48,6 +49,7 @@ export class Router {
     }
 
     _triggerPopState(e) {
+        console.log("first");
         this._triggerRouteChange(e.state.path, e.target.location.href);
     }
 
@@ -66,16 +68,18 @@ export class Router {
             url.match(/([A-Za-z_0-9.]*)/gm, (match, token) => {
                 return token;
             })[1];
-
-        return this.routeHash.includes(test) ? test : null;
+        // console.log(this.routeHash, url, test);
+        return this.routeHash.includes(test) ? test : "**";
     }
 
     //метод проверяет наличие маршрута в массиве маршрутов и создает новую запись в истории
     _tryNav(href) {
         const url = this._createUrl(href);
+        // console.log(url);
         if (url.protocol.startsWith("http")) {
             const routePath = this._findRoute(url.pathname);
-            if (routePath && this.options.routes[routePath]) {
+
+            if (routePath && this.options.routes.find((r) => r.path === routePath)) {
                 if (this.options.type === "history") {
                     window.history.pushState({ path: routePath }, routePath, url.origin + url.pathname);
                 }
@@ -98,7 +102,12 @@ export class Router {
         // обрабатывает клик в документе
         const href = e.target?.closest("[href]")?.href;
 
-        if (href && this._tryNav(href)) e.preventDefault();
+        e.preventDefault();
+
+        this._tryNav(href);
+        // console.log(e);
+        // console.log(href);
+        // return this;
     }
 
     /**

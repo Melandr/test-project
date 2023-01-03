@@ -22,8 +22,8 @@ export class Module {
         initRouting(this.routes, this.dispatcher);
         initDirectives(this.directives);
 
-        // this.dispatcher.on("routing.change-page", () => {
-        //     initDirectives(this.directives);
-        // });
+        this.dispatcher.host.addEventListener("routing.change-page", () => {
+            initDirectives(this.directives);
+        });
     }
 }
