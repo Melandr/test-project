@@ -110,9 +110,7 @@ export class Router {
         // обрабатывает клик в документе
         const href = e.target?.closest("[href]")?.href;
 
-        e.preventDefault();
-
-        this._tryNav(href);
+        if (href && this._tryNav(href)) e.preventDefault();
     }
 
     /**
