@@ -1,4 +1,4 @@
-import { WFMComponent, Router } from "framework";
+import { WFMComponent, router } from "framework";
 
 class LoginPageComponent extends WFMComponent {
     constructor(config) {
@@ -18,7 +18,7 @@ class LoginPageComponent extends WFMComponent {
 
     goToHome(event) {
         event.preventDefault();
-        router.navigate("");
+        router.setRoute("/");
     }
 
     sendForm(event) {

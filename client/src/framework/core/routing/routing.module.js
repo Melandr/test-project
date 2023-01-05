@@ -1,18 +1,21 @@
 import { _ } from "../../tools/util";
-import { Router } from "./router";
+import { router } from "framework";
 import { renderComponent } from "../component/render-component";
 import { $ } from "../../tools/dom";
 
 export class RoutingModule {
     constructor(routes, dispatcher) {
         this.routes = routes;
-        this.router = new Router({ type: "history", routes });
+        // this.router = router.extend({ type: "history", routes });
+        this.router = router;
+
         this.dispatcher = dispatcher;
     }
 
     init() {
+        router.routes = this.routes;
+        router.type = "history";
         this.router.listen().on("route", renderRoute.bind(this));
-
         // renderRoute.call(this);
     }
 }

@@ -12,17 +12,25 @@ const ROUTER_TYPES = {
  * SPA Router - replacement for Framework Routers (history and hash).
  */
 export class Router {
-    constructor(options = {}) {
+    #type = ROUTER_TYPES.hash;
+    #routes;
+    constructor() {
         this.events = new EventEmitter(this);
-        this.options = { type: ROUTER_TYPES.hash, ...options };
     }
 
+    set routes(value) {
+        this.#routes = value;
+    }
+
+    set type(value) {
+        this.#type = value;
+    }
     /**
      * Start listening for route changes.
      * @returns {VanillaRouter} reference to itself.
      */
     listen() {
-        const routs = this.options.routes.map((route) => route.path);
+        const routs = this.#routes.map((route) => route.path);
 
         this.routeHash = Object.values(routs);
 
@@ -49,13 +57,13 @@ export class Router {
     }
 
     _triggerPopState(e) {
-        console.log("first");
+        console.log(this);
         this._triggerRouteChange(e.state.path, e.target.location.href);
     }
 
     _triggerRouteChange(path, url) {
         this.events.emit("route", {
-            route: this.options.routes[path],
+            route: this.#routes[path],
             path: path,
             url: url,
         });
@@ -75,12 +83,12 @@ export class Router {
     //метод проверяет наличие маршрута в массиве маршрутов и создает новую запись в истории
     _tryNav(href) {
         const url = this._createUrl(href);
-        // console.log(url);
+
         if (url.protocol.startsWith("http")) {
             const routePath = this._findRoute(url.pathname);
 
-            if (routePath && this.options.routes.find((r) => r.path === routePath)) {
-                if (this.options.type === "history") {
+            if (routePath && this.#routes.find((r) => r.path === routePath)) {
+                if (this.#type === "history") {
                     window.history.pushState({ path: routePath }, routePath, url.origin + url.pathname);
                 }
 
@@ -105,9 +113,6 @@ export class Router {
         e.preventDefault();
 
         this._tryNav(href);
-        // console.log(e);
-        // console.log(href);
-        // return this;
     }
 
     /**
@@ -123,6 +128,8 @@ export class Router {
     }
 
     get isHashRouter() {
-        return this.options.type === ROUTER_TYPES.hash;
+        return this.#type === ROUTER_TYPES.hash;
     }
 }
+
+export const router = new Router();
