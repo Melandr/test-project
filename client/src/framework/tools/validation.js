@@ -1,12 +1,9 @@
-export class FormValidator {
-    constructor() {}
+export function validateField(value, typeDomObject, minlength = 3) {
+    if (!value) {
+        throw new Error(`Пожалуйста, заполните поле ${typeDomObject}`);
+    }
 
-    /*
-     * @private
-     * Determines if a form dom node was passed in or just a string representing the form name
-     */
-
-    _formByNameOrNode(formNameOrNode) {
-        return typeof formNameOrNode === "object" ? formNameOrNode : document.forms[formNameOrNode];
+    if (value.length <= parseInt(minlength) && typeDomObject === "password") {
+        throw new Error(`Пожалуйста, заполните поле ${typeDomObject} минимум ${minlength} символов`);
     }
 }

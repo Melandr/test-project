@@ -6,8 +6,22 @@ import { bootstrap } from "./core/functions/bootstrap";
 import { _ } from "./tools/util";
 import { $ } from "./tools/dom";
 import { http } from "./tools/http";
+import { jwt } from "./tools/jwt";
 import { EventEmitter } from "./tools/event-emitter";
-import { FormValidator } from "./tools/validation";
+import { validateField } from "./tools/validation";
 import { router } from "./core/routing/router";
 
-export { WFMModule, WFMComponent, WFMDirective, WFMPipe, EventEmitter, bootstrap, _, $, http, router, FormValidator };
+export {
+    WFMModule,
+    WFMComponent,
+    WFMDirective,
+    WFMPipe,
+    EventEmitter,
+    bootstrap,
+    _,
+    $,
+    http,
+    jwt,
+    router,
+    validateField,
+};

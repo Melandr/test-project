@@ -69,6 +69,10 @@ class DOMManipulator {
         return this;
     }
 
+    getValue() {
+        return this.nativeElement.value;
+    }
+
     find(selector) {
         return $(this.nativeElement.querySelector(selector));
     }

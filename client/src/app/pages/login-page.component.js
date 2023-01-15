@@ -1,4 +1,5 @@
-import { WFMComponent, router } from "framework";
+import { WFMComponent, router, $, validateField, http, jwt } from "framework";
+import { secret_key, api_url, auth_url, detail_url, proxy_url } from "../config.js";
 
 class LoginPageComponent extends WFMComponent {
     constructor(config) {
@@ -6,13 +7,17 @@ class LoginPageComponent extends WFMComponent {
 
         this.data = {
             linkTitle: "Перейти на главную",
+            login: "",
+            password: "",
         };
     }
 
     events() {
         return {
             "click .js-link": "goToHome",
-            "click .submit": "sendForm",
+            "click .submit": "submitForm",
+            "blur #login-input": "clearError",
+            "blur #password-input": "clearError",
         };
     }
 
@@ -21,9 +26,84 @@ class LoginPageComponent extends WFMComponent {
         router.setRoute("/");
     }
 
-    sendForm(event) {
+    submitForm(event) {
         event.preventDefault();
-        console.log("Send form");
+
+        const form = this.el.find("#form");
+        const fields = [...form.findAll("[name]")];
+
+        try {
+            // проверяем поля на количество символов
+            fields.forEach((field) => {
+                let minlength = 3;
+
+                this.validation(field.getValue(), field.attr("name"), minlength);
+            });
+
+            if (fields.every((field) => field.hasClass("error"))) return console.log("Что-то пошло не так...");
+
+            //получаем пароль из поля формы и преобразуем пароль в хэшированный вид
+            const hashedPassword = jwt.hashPassword(this.getFormData().password);
+
+            const formData = {
+                login: this.getFormData().login,
+                password: hashedPassword,
+            };
+
+            this.getTokenData(formData);
+        } catch (err) {
+            // console.log(err);
+        }
+    }
+
+    validation(domObject, typeDomObject, minlength) {
+        try {
+            validateField(domObject, typeDomObject, minlength);
+        } catch (err) {
+            this.renderError(err.message, typeDomObject);
+            throw err;
+        }
+    }
+
+    getFormData() {
+        const form = this.el.find("#form");
+
+        this.data.login = form.find('[name="login"]').getValue();
+        this.data.password = form.find('[name="password"]').getValue();
+
+        return {
+            login: this.data.login,
+            password: this.data.password,
+        };
+    }
+
+    //отображение ошибки при валидации формы
+    renderError(msg, attribute) {
+        const $element = this.el.find(`[name="${attribute}"]`);
+        const $spanError = this.el.find(`#error-${attribute}`);
+
+        $spanError.textContent = msg;
+
+        $spanError.addClass("active");
+
+        $element.addClass("error");
+        $element.addClass("active");
+    }
+
+    //очистка ошибки при валидации формы
+    clearError({ target }) {
+        const $spanError = this.el.find(`#error-${$(target).attr("name")}`);
+        // console.log(spanError);
+        $spanError.textContent = "";
+        $spanError.removeClass("active");
+        $(target).removeClass("error");
+        $(target).removeClass("active");
+    }
+
+    getTokenData(body) {
+        const url = proxy_url + auth_url;
+
+        http.post(url, body);
     }
 }
 

@@ -7,6 +7,16 @@ const _ = {
         });
     },
 
+    //Функция для сохранения токена в sessionStorage
+    saveToken(token) {
+        sessionStorage.setItem("token", token);
+    },
+
+    //Функция чтения токена из sessionStorage
+    getToken() {
+        return sessionStorage.getItem("token");
+    },
+
     isUndefined(d) {
         return typeof d === "undefined";
     },
