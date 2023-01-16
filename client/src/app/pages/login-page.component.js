@@ -1,4 +1,4 @@
-import { WFMComponent, router, $, validateField, http, jwt } from "framework";
+import { WFMComponent, router, $, _, validateField, http, jwt } from "framework";
 import { secret_key, api_url, auth_url, detail_url, proxy_url } from "../config.js";
 
 class LoginPageComponent extends WFMComponent {
@@ -103,7 +103,10 @@ class LoginPageComponent extends WFMComponent {
     getTokenData(body) {
         const url = proxy_url + auth_url;
 
-        http.post(url, body);
+        http.post(url, body).then((token) => {
+            _.saveToken(token);
+            // return Promise.resolve(token);
+        });
     }
 }
 
