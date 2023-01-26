@@ -51,6 +51,8 @@ class LoginPageComponent extends WFMComponent {
             };
 
             this.getTokenData(formData);
+
+            
         } catch (err) {
             // console.log(err);
         }
@@ -100,13 +102,26 @@ class LoginPageComponent extends WFMComponent {
         $(target).removeClass("active");
     }
 
-    getTokenData(body) {
+    getTokenData(response) {
         const url = proxy_url + auth_url;
 
-        http.post(url, body).then((token) => {
-            _.saveToken(token);
-            // return Promise.resolve(token);
-        });
+        http.post(url, response)
+            .then((data) => {
+                if (data.status === 200) {
+                    return data.json();
+                }
+                return data.json().then((data) => {
+                    throw new Error(data.detail);
+                });
+            })
+            .then((data) => {
+                console.log(data);
+                _.saveToken(data.token);
+                // return Promise.resolve(token);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 }
 
