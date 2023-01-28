@@ -18,16 +18,22 @@ class HTTP {
 }
 
 function sendRequest(url, options, data = {}) {
-    return fetch(url, options).then(handleResponse);
+    return fetch(url, options).then(manageErrors);
 }
 
-function handleResponse(response) {
-    if (!response.ok && response.status === 404) {
-        return Promise.reject(response);
+async function manageErrors(response) {
+    if (!response.ok) {
+        console.log(response);
+        const error = await response.json();
+
+        const responseError = {
+            statusText: response.statusText,
+            status: response.status,
+            message: error.detail,
+        };
+        throw responseError;
     }
-    if (response.status === 200) {
-        return response.json();
-    }
+    return response;
 }
 
 export const http = new HTTP();

@@ -104,15 +104,14 @@ class LoginPageComponent extends WFMComponent {
         const url = proxy_url + auth_url;
 
         http.post(url, response)
+            .then((response) => response.json())
             .then((data) => {
                 console.log(data);
                 _.saveToken(data.token);
                 // return Promise.resolve(token);
             })
             .catch((response) => {
-                return response.json().then((data) => {
-                    console.log(data.detail);
-                });
+                console.log(response);
             });
     }
 
