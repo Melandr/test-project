@@ -3,7 +3,7 @@ class HTTP {
         const options = {
             method: "GET",
         };
-        return sendRequest(url, options).then(handleResponse);
+        return sendRequest(url, options);
     }
 
     post(url, body) {
@@ -13,17 +13,21 @@ class HTTP {
             body: JSON.stringify(body),
         };
 
-        return sendRequest(url, options).then(handleResponse);
-        // .catch((err) => console.log(err.message));
+        return sendRequest(url, options);
     }
 }
 
 function sendRequest(url, options, data = {}) {
-    return fetch(url, options);
+    return fetch(url, options).then(handleResponse);
 }
 
 function handleResponse(response) {
-    return response;
+    if (!response.ok && response.status === 404) {
+        return Promise.reject(response);
+    }
+    if (response.status === 200) {
+        return response.json();
+    }
 }
 
 export const http = new HTTP();

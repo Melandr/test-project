@@ -51,8 +51,6 @@ class LoginPageComponent extends WFMComponent {
             };
 
             this.getTokenData(formData);
-
-            
         } catch (err) {
             // console.log(err);
         }
@@ -107,21 +105,39 @@ class LoginPageComponent extends WFMComponent {
 
         http.post(url, response)
             .then((data) => {
-                if (data.status === 200) {
-                    return data.json();
-                }
-                return data.json().then((data) => {
-                    throw new Error(data.detail);
-                });
-            })
-            .then((data) => {
                 console.log(data);
                 _.saveToken(data.token);
                 // return Promise.resolve(token);
             })
-            .catch((error) => {
-                console.log(error);
+            .catch((response) => {
+                return response.json().then((data) => {
+                    console.log(data.detail);
+                });
             });
+    }
+
+    //Функция получения детальной информации о пользователе
+    getUserDetailInfo(sucess) {
+        const url = proxy_url + detail_url;
+
+        const options = {
+            method: "GET",
+            headers: {
+                tmst: jwt._formatDate(),
+                token: _.getToken(),
+                sign: jwt.createSign(api_url + detail_url, _.getToken(), secret_key),
+            },
+        };
+
+        return fetch(url, options).then((response) => {
+            if (response.status === 200) {
+                return response.json().then((request) => {
+                    console.log(response);
+                    const name = request.name;
+                    sucess(name);
+                });
+            }
+        });
     }
 }
 
