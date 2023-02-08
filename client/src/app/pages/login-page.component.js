@@ -26,6 +26,7 @@ class LoginPageComponent extends WFMComponent {
         router.setRoute("/");
     }
 
+    //функция отправки данных из формы на сервер
     submitForm(event) {
         event.preventDefault();
 
@@ -52,10 +53,13 @@ class LoginPageComponent extends WFMComponent {
 
             this.getTokenData(formData);
         } catch (err) {
-            // console.log(err);
+            console.log(err);
+        } finally {
+            // router.setRoute("/info");
         }
     }
 
+    //функция валидации формы
     validation(domObject, typeDomObject, minlength) {
         try {
             validateField(domObject, typeDomObject, minlength);
@@ -65,6 +69,7 @@ class LoginPageComponent extends WFMComponent {
         }
     }
 
+    //функция получения данных из полей формы
     getFormData() {
         const form = this.el.find("#form");
 
@@ -100,18 +105,20 @@ class LoginPageComponent extends WFMComponent {
         $(target).removeClass("active");
     }
 
+    //функция получения токена авторизации
     getTokenData(response) {
         const url = proxy_url + auth_url;
 
         http.post(url, response)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 _.saveToken(data.token);
                 // return Promise.resolve(token);
             })
-            .catch((response) => {
-                console.log(response);
+            .catch((error) => {
+                console.log(error);
+                // return Promise.reject(error);
+                //тут нужно вывести текст ошибки
             });
     }
 

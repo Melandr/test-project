@@ -23,7 +23,6 @@ function sendRequest(url, options, data = {}) {
 
 async function manageErrors(response) {
     if (!response.ok) {
-        console.log(response);
         const error = await response.json();
 
         const responseError = {
@@ -35,5 +34,26 @@ async function manageErrors(response) {
     }
     return response;
 }
+
+// function manageErrors(response) {
+//     if (!response.ok) {
+//         const responseError = {
+//             statusText: response.statusText,
+//             status: response.status,
+//             message: "",
+//         };
+
+//         const error = response
+//             .json()
+//             .then((result) => result.detail)
+//             .then((data) => {
+//                 responseError.message = data;
+//                 console.log(responseError.message);
+//             });
+
+//         throw responseError;
+//     }
+//     return response;
+// }
 
 export const http = new HTTP();
