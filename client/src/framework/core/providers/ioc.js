@@ -1,4 +1,4 @@
-export default class Ioc {
+class IoC {
     constructor() {
         this._resolvers = {};
         this._isSingleton = {};
@@ -8,7 +8,7 @@ export default class Ioc {
 
     use(token) {
         if (!this._resolvers[token]) {
-            throw new Error("Not FoundError", `Resolver for token ${token} doesn't exist`);
+            throw new Error(`Resolver for token ${token} doesn't exist`);
         }
 
         if (this._resolvedInstances[token]) {
@@ -49,3 +49,5 @@ export default class Ioc {
         serviceProvider.register(this);
     }
 }
+
+export const ioc = new IoC();

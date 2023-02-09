@@ -1,5 +1,6 @@
 import { WFMComponent, router, http } from "framework";
 
+
 class InfoPageComponent extends WFMComponent {
     constructor(config) {
         super(config);
