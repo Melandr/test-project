@@ -1,5 +1,5 @@
-import { WFMComponent, router, http } from "framework";
-
+import { WFMComponent, ioc, router, http } from "framework";
+import { ExampleService } from "../app.example.service";
 
 class InfoPageComponent extends WFMComponent {
     constructor(config) {
@@ -21,3 +21,8 @@ export const infoPageComponent = new InfoPageComponent({
     styles: `
     `,
 });
+
+// const appTitle = ioc.use("APP_TITLE");
+// console.log(appTitle);
+// console.log(ioc.use("APP_TITLE"));
+console.log(ioc);

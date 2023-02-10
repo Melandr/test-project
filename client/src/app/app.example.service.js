@@ -7,7 +7,7 @@ class ExampleProvider extends WFMProvider {
      */
     register(ioc) {
         //регистрация строки (имя сайта)
-        ioc.singleton("APP_TITLE", () => "GronMax App");
+        ioc.singleton("APP_TITLE", () => "GromMax App");
     }
 }
 
