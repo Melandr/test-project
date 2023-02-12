@@ -1,4 +1,4 @@
-class IoC {
+export class IoC {
     constructor() {
         this._resolvers = {};
         this._isSingleton = {};
@@ -50,4 +50,4 @@ class IoC {
     }
 }
 
-export const ioc = new IoC();
+// export const ioc = new IoC();
