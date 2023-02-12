@@ -3,7 +3,7 @@ import { appComponent } from "./app.component";
 import { appHeader } from "./shared/app.header";
 import { appRoutes } from "./app.routes";
 import DataService from "./app.data.service";
-import ExampleProvider from "./app.example.service";
+import ExampleProvider from "./app.providers";
 
 class AppModule extends WFMModule {
     constructor(config) {
