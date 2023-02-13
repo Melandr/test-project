@@ -9,6 +9,8 @@ import { ExampleService } from "./app/app.example.service";
 
 bootstrap(appModule);
 
+const ioc = appModule.ioc;
+
 const appTitle = ioc.use(APP_TITLE_TOKEN);
 console.log(appTitle);
 
@@ -16,5 +18,3 @@ console.log(appTitle);
 const exampleService = ioc.use(ExampleService);
 exampleService.run();
 console.log("exampleService", exampleService);
-
-console.log(ioc);
