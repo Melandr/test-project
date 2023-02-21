@@ -1,5 +1,5 @@
 import { WFMComponent, ioc, router, http } from "framework";
-import { ExampleProvider } from "../app.providers";
+import { ExampleProvider } from "../app.service-provider";
 
 class InfoPageComponent extends WFMComponent {
     constructor(config) {

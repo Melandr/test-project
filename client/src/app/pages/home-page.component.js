@@ -1,11 +1,13 @@
 import { WFMComponent, router, http } from "framework";
+import ExampleProvider from "../app.service-provider";
+import { APP_TITLE_TOKEN } from "../../app/contracts";
 
 class HomePageComponent extends WFMComponent {
     constructor(config) {
         super(config);
 
         this.data = {
-            title: "Приветствуем Вас в системе управления доступом",
+            title: "Приветствуем Вас в системе управления доступом.",
         };
     }
 }
@@ -20,4 +22,5 @@ export const homePageComponent = new HomePageComponent({
     `,
     styles: `
     `,
+    // providers: [ExampleProvider],
 });

@@ -1,5 +1,6 @@
 import { WFMComponent, router, $, _, validateField, http, jwt } from "framework";
 import { secret_key, api_url, auth_url, detail_url, proxy_url } from "../config.js";
+import ExampleProvider from "../app.service-provider";
 
 class LoginPageComponent extends WFMComponent {
     constructor(config) {
@@ -52,6 +53,7 @@ class LoginPageComponent extends WFMComponent {
             };
 
             this.getTokenData(formData);
+            console.log(this);
         } catch (err) {
             console.log(err);
         } finally {
@@ -113,6 +115,7 @@ class LoginPageComponent extends WFMComponent {
             .then((response) => response.json())
             .then((data) => {
                 _.saveToken(data.token);
+                console.log(data.token);
                 // return Promise.resolve(token);
             })
             .catch((error) => {
@@ -176,4 +179,5 @@ export const loginPageComponent = new LoginPageComponent({
     styles: `
         .link__block {display: flex; justify-content: center; margin-top: 30px;}
     `,
+    providers: [ExampleProvider],
 });
