@@ -1,6 +1,12 @@
 import { WFMComponent, router, $, _, validateField, http, jwt } from "framework";
 import { secret_key, api_url, auth_url, detail_url, proxy_url } from "../config.js";
-import ExampleProvider from "../app.service-provider";
+
+import { initProviders } from "../../framework/core/providers/init-providers.js";
+import { APP_TITLE_TOKEN } from "../services/contracts";
+import ExampleServiceProvider from "../services/example.service-provider";
+import { ExampleService } from "../services/example.service";
+import DataServiceProvider from "../services/data.service-provider";
+import { DataService } from "../services/data.service";
 
 class LoginPageComponent extends WFMComponent {
     constructor(config) {
@@ -20,6 +26,19 @@ class LoginPageComponent extends WFMComponent {
             "blur #login-input": "clearError",
             "blur #password-input": "clearError",
         };
+    }
+
+    afterInit() {
+        this.ioc = initProviders(this.providers);
+    }
+
+    runServices() {
+        // const appTitle = this.ioc.use(APP_TITLE_TOKEN);
+        // console.log(appTitle);
+        /**@type {ExampleService} */
+        // const exampleService = this.ioc.use(ExampleService);
+        // exampleService.run();
+        // console.log("exampleService", exampleService);
     }
 
     goToHome(event) {
@@ -53,7 +72,7 @@ class LoginPageComponent extends WFMComponent {
             };
 
             this.getTokenData(formData);
-            console.log(this);
+            this.runServices();
         } catch (err) {
             console.log(err);
         } finally {
@@ -115,7 +134,11 @@ class LoginPageComponent extends WFMComponent {
             .then((response) => response.json())
             .then((data) => {
                 _.saveToken(data.token);
-                console.log(data.token);
+
+                /**@type {DataService} */
+                const dataService = this.ioc.use(DataService);
+                console.log(dataService.getMessage());
+                dataService.setMessage(data.token);
                 // return Promise.resolve(token);
             })
             .catch((error) => {
@@ -179,5 +202,5 @@ export const loginPageComponent = new LoginPageComponent({
     styles: `
         .link__block {display: flex; justify-content: center; margin-top: 30px;}
     `,
-    providers: [ExampleProvider],
+    providers: [ExampleServiceProvider, DataServiceProvider],
 });

@@ -1,6 +1,4 @@
-import { WFMProvider } from "framework";
-
-class DataService extends WFMProvider {
+export class DataService {
     message = 1;
 
     getMessage() {
@@ -12,4 +10,4 @@ class DataService extends WFMProvider {
     }
 }
 
-export default new DataService();
+// export default new DataService();

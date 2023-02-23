@@ -2,8 +2,7 @@ import { WFMModule } from "framework";
 import { appComponent } from "./app.component";
 import { appHeader } from "./shared/app.header";
 import { appRoutes } from "./app.routes";
-import DataService from "./app.data.service";
-import ServiceProvider from "./app.service-provider";
+import ServiceProvider from "./services/example.service-provider";
 
 class AppModule extends WFMModule {
     constructor(config) {

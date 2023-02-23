@@ -50,4 +50,4 @@ export class IoC {
     }
 }
 
-// export const ioc = new IoC();
+export const ioc = new IoC();

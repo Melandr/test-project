@@ -1,6 +1,6 @@
 import { WFMComponent, router, http } from "framework";
-import ExampleProvider from "../app.service-provider";
-import { APP_TITLE_TOKEN } from "../../app/contracts";
+import ExampleProvider from "../services/example.service-provider";
+import { APP_TITLE_TOKEN } from "../services/contracts";
 
 class HomePageComponent extends WFMComponent {
     constructor(config) {

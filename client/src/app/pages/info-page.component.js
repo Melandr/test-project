@@ -1,5 +1,5 @@
 import { WFMComponent, ioc, router, http } from "framework";
-import { ExampleProvider } from "../app.service-provider";
+import DataServiceProvider from "../services/data.service-provider";
 
 class InfoPageComponent extends WFMComponent {
     constructor(config) {
@@ -20,4 +20,5 @@ export const infoPageComponent = new InfoPageComponent({
     `,
     styles: `
     `,
+    providers: [DataServiceProvider],
 });

@@ -1,10 +1,10 @@
-import { IoC } from "./ioc";
+import { IoC, ioc } from "./ioc";
 import { Provider } from "./provider";
 
-export function initProviders(providers) {
-    const ioc = new IoC();
+export function initProviders(serviceProviders) {
+    // const ioc = new IoC();
 
-    providers.forEach((provider) => {
+    serviceProviders.forEach((provider) => {
         if (!(provider instanceof Provider)) {
             console.error("Incorrect type of provider", provider);
             throw new Error("Incorrect type of provider");

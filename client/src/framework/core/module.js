@@ -5,8 +5,8 @@ import { EventEmitter } from "../tools/event-emitter";
 import { initPipes } from "./pipes/init-pipes";
 import { initProviders } from "./providers/init-providers";
 
-import { APP_TITLE_TOKEN } from "../../app/contracts";
-import { ExampleService } from "../../app/app.example.service";
+import { APP_TITLE_TOKEN } from "../../app/services/contracts";
+import { ExampleService } from "../../app/services/example.service";
 
 export class Module {
     constructor(config) {
