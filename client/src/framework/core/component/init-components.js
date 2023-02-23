@@ -6,5 +6,7 @@ export function initComponents(bootstrap, components) {
         throw new Error("Bootstrap component is not defined");
     }
 
-    [bootstrap, ...components].forEach(renderComponent);
+    [bootstrap, ...components].forEach((element) => {
+        renderComponent(element);
+    });
 }

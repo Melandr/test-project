@@ -2,7 +2,7 @@ import { _ } from "../../tools/util";
 import { $ } from "../../tools/dom";
 import { parsePipe } from "../pipes/parse-pipe";
 import { applyPipe } from "../pipes/apply-pipe";
-import { initProviders } from "../providers/init-providers";
+import { registerProviders } from "../providers/register-providers";
 
 export class Component {
     constructor(config) {
@@ -11,7 +11,7 @@ export class Component {
         this.styles = config.styles;
         this.el = null;
         this.providers = config.providers;
-        this.ioc = {};
+        this.ioc = config.ioc;
     }
 
     render() {
@@ -22,6 +22,12 @@ export class Component {
         this.el.html(compileTemplate(this.template, this.data));
 
         initEvents.call(this);
+    }
+
+    onInit() {
+        if (this.hasOwnProperty("providers") && !_.isUndefined(this.providers)) {
+            this.ioc = registerProviders(this.providers);
+        }
     }
 }
 

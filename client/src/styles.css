@@ -19,7 +19,8 @@ a:hover {
 }
 
 .home,
-h2 {
+h2,
+p {
     text-align: center;
 }
 

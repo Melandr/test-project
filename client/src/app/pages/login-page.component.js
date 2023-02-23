@@ -1,7 +1,7 @@
-import { WFMComponent, router, $, _, validateField, http, jwt } from "framework";
+import { WFMComponent, ioc, router, $, _, validateField, http, jwt } from "framework";
 import { secret_key, api_url, auth_url, detail_url, proxy_url } from "../config.js";
 
-import { initProviders } from "../../framework/core/providers/init-providers.js";
+import { registerProviders } from "../../framework/core/providers/register-providers.js";
 import { APP_TITLE_TOKEN } from "../services/contracts";
 import ExampleServiceProvider from "../services/example.service-provider";
 import { ExampleService } from "../services/example.service";
@@ -28,19 +28,6 @@ class LoginPageComponent extends WFMComponent {
         };
     }
 
-    afterInit() {
-        this.ioc = initProviders(this.providers);
-    }
-
-    runServices() {
-        // const appTitle = this.ioc.use(APP_TITLE_TOKEN);
-        // console.log(appTitle);
-        /**@type {ExampleService} */
-        // const exampleService = this.ioc.use(ExampleService);
-        // exampleService.run();
-        // console.log("exampleService", exampleService);
-    }
-
     goToHome(event) {
         event.preventDefault();
         router.setRoute("/");
@@ -50,6 +37,7 @@ class LoginPageComponent extends WFMComponent {
     submitForm(event) {
         event.preventDefault();
 
+        const dataService = this.ioc.use(DataService);
         const form = this.el.find("#form");
         const fields = [...form.findAll("[name]")];
 
@@ -71,12 +59,17 @@ class LoginPageComponent extends WFMComponent {
                 password: hashedPassword,
             };
 
-            this.getTokenData(formData);
-            this.runServices();
+            this.getTokenData(formData)
+                .then((data) => {
+                    dataService.setMessage(data);
+                    router.setRoute("/info");
+                })
+                .catch((data) => {
+                    dataService.setError(data);
+                    router.setRoute("/info");
+                });
         } catch (err) {
             console.log(err);
-        } finally {
-            // router.setRoute("/info");
         }
     }
 
@@ -130,22 +123,21 @@ class LoginPageComponent extends WFMComponent {
     getTokenData(response) {
         const url = proxy_url + auth_url;
 
-        http.post(url, response)
+        const result = http
+            .post(url, response)
             .then((response) => response.json())
             .then((data) => {
                 _.saveToken(data.token);
 
-                /**@type {DataService} */
-                const dataService = this.ioc.use(DataService);
-                console.log(dataService.getMessage());
-                dataService.setMessage(data.token);
-                // return Promise.resolve(token);
+                return Promise.resolve(data.token);
             })
             .catch((error) => {
-                console.log(error);
-                // return Promise.reject(error);
+                // console.log(error);
+                return Promise.reject(error);
                 //тут нужно вывести текст ошибки
             });
+
+        return result;
     }
 
     //Функция получения детальной информации о пользователе
@@ -202,5 +194,6 @@ export const loginPageComponent = new LoginPageComponent({
     styles: `
         .link__block {display: flex; justify-content: center; margin-top: 30px;}
     `,
-    providers: [ExampleServiceProvider, DataServiceProvider],
+    providers: [DataServiceProvider],
+    ioc: ioc,
 });

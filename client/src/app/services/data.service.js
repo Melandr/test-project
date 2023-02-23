@@ -1,5 +1,6 @@
 export class DataService {
-    message = 1;
+    message = "";
+    error = {};
 
     getMessage() {
         return this.message;
@@ -8,6 +9,12 @@ export class DataService {
     setMessage(value) {
         this.message = value;
     }
-}
 
-// export default new DataService();
+    getError() {
+        return this.error;
+    }
+
+    setError(value) {
+        this.error = value;
+    }
+}
