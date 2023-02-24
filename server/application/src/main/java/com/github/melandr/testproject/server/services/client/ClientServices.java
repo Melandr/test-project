@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.melandr.testproject.server.exceptions.TokenExpireException;
+import com.github.melandr.testproject.server.protocol.role.RoleI;
+import com.github.melandr.testproject.server.protocol.role.RoleProviderI;
 import com.github.melandr.testproject.server.protocol.user.UserI;
 import com.github.melandr.testproject.server.protocol.user.UserProviderI;
 import com.github.melandr.testproject.server.services.client.Dto.AuthRequest;
@@ -40,6 +44,8 @@ class ClientServices {
 
     @Autowired
     private UserProviderI userProvider;
+    @Autowired
+    private RoleProviderI roleProvider;
 
     @Autowired
     private Cache<String, String> tokensCache;
@@ -102,6 +108,7 @@ class ClientServices {
             throw new TokenExpireException();
         }
         UserI user = userProvider.getUserByLogin(login);
-        return new UserResponse(user.getName());
+        List<RoleI> roles = roleProvider.getRoles(user.getId());
+        return new UserResponse(user.getName(), roles.stream().map(RoleI::getName).collect(Collectors.toSet()));
     }
 }

@@ -10,4 +10,5 @@ public interface RoleProviderI {
 
     void deleteRole(int roleId);
 
+    List<RoleI> getRoles(int userId);
 }
