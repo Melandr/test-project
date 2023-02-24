@@ -73,6 +73,10 @@ class LoginPageComponent extends WFMComponent {
         }
     }
 
+    clearContainerIOC() {
+
+    }
+
     //функция валидации формы
     validation(domObject, typeDomObject, minlength) {
         try {

@@ -10,6 +10,7 @@ class InfoPageComponent extends WFMComponent {
             title: "Информация о пользователе",
             message: "",
             error: {},
+            messageError: "",
         };
 
         this.service = {};
@@ -17,10 +18,12 @@ class InfoPageComponent extends WFMComponent {
 
     onInit() {
         super.onInit();
+
         this.service = this.ioc.use(DataService);
 
-        this.data.message = this.service.getMessage();
+        this.data.message = this.service.getMessage() ?? "";
         this.data.error = this.service.getError();
+        this.data.messageError = this.service.getError().message ?? "";
         console.log(this.data);
     }
 }
@@ -31,6 +34,7 @@ export const infoPageComponent = new InfoPageComponent({
     <div class="info">
         <h2>{{title}}</h2>
         <p>{{message}}</p>
+        <p>{{messageError}}</p>
     </div>
     `,
     styles: `
