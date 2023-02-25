@@ -10,10 +10,4 @@ public interface UserI {
 
     byte[] getPassword();
 
-    String getFirstName();
-    String getLastName();
-    String getMiddleName();
-    String getPhone();
-    String getEmail();
-    String getPhoto();
 }
