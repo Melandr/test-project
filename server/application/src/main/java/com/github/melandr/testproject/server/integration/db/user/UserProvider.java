@@ -40,17 +40,16 @@ class UserProvider implements UserProviderI {
 
 	private UserI makeUser(ResultSet rs) throws SQLException {
 		String firstName = rs.getString("FIRST_NAME");
-		String lastName = rs.getString("FIRST_NAME");
-		String middleName = rs.getString("FIRST_NAME");
+		String lastName = rs.getString("LAST_NAME");
+		String middleName = rs.getString("MIDDLE_NAME");
 		
-		new User(rs.getInt("ID"), rs.getString("LOGIN"), rs.getString("PASSWORD").getBytes(StandardCharsets.UTF_8),
+		return new User(rs.getInt("ID"), rs.getString("LOGIN"), rs.getString("PASSWORD").getBytes(StandardCharsets.UTF_8),
 				StringUtils.join(new String[] { firstName, lastName, middleName }, " "),
 				firstName, lastName, middleName,
 				rs.getString("PHONE"), rs.getString("EMAIL"),
 				//TODO вернуть тут фото PHOTO blob(10K)
 				null
 				);
-		return null;
 	}
 
 	@Override
