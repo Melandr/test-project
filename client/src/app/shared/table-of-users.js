@@ -10,7 +10,7 @@ export const tableOfUsers = new TableOfUsers({
     selector: "table-of-users",
     template: `
         <div class="table-users__block">
-            <table class="color">
+            <table class="users">
             <tbody>
                 <tr>
                     <th>Логин</th>
