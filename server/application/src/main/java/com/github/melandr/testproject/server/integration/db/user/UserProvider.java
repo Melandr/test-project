@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.RowMapperResultSetExtractor;
 import org.springframework.stereotype.Component;
 
 import com.github.melandr.testproject.server.protocol.user.UserI;
@@ -28,20 +27,30 @@ class UserProvider implements UserProviderI {
 	@Override
 	public UserI getUserByLogin(String login) {
 		return template.query(con -> {
-			PreparedStatement ps = con.prepareStatement(
-					"select ID, LOGIN, PASSWORD, FIRST_NAME, LAST_NAME, MIDDLE_NAME from USERS where LOGIN like ?");
+			PreparedStatement ps = con.prepareStatement("select * from USERS where LOGIN like ?");
 			ps.setString(1, login);
 			return ps;
 		}, rs -> {
-			User user = null;
 			if (rs.next()) {
-				user = new User(rs.getInt("ID"), rs.getString("LOGIN"),
-						rs.getString("PASSWORD").getBytes(StandardCharsets.UTF_8),
-						StringUtils.join(new String[] { rs.getString("FIRST_NAME"), rs.getString("LAST_NAME"),
-								rs.getString("MIDDLE_NAME") }, " "));
+				return makeUser(rs);
 			}
-			return user;
+			return null;
 		});
+	}
+
+	private UserI makeUser(ResultSet rs) throws SQLException {
+		String firstName = rs.getString("FIRST_NAME");
+		String lastName = rs.getString("FIRST_NAME");
+		String middleName = rs.getString("FIRST_NAME");
+		
+		new User(rs.getInt("ID"), rs.getString("LOGIN"), rs.getString("PASSWORD").getBytes(StandardCharsets.UTF_8),
+				StringUtils.join(new String[] { firstName, lastName, middleName }, " "),
+				firstName, lastName, middleName,
+				rs.getString("PHONE"), rs.getString("EMAIL"),
+				//TODO вернуть тут фото PHOTO blob(10K)
+				null
+				);
+		return null;
 	}
 
 	@Override
@@ -55,4 +64,17 @@ class UserProvider implements UserProviderI {
 		});
 	}
 
+	@Override
+	public UserI getUserById(Integer userId) {
+		return template.query(con -> {
+			PreparedStatement ps = con.prepareStatement("select * from USERS where ID = ?");
+			ps.setInt(1, userId);
+			return ps;
+		}, rs -> {
+			if (rs.next()) {
+				return makeUser(rs);
+			}
+			return null;
+		});
+	}
 }

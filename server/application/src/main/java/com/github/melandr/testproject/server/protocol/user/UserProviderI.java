@@ -9,4 +9,6 @@ public interface UserProviderI {
     UserI getUserByLogin(String login);
 
 	List<Integer> getUsers();
+
+	UserI getUserById(Integer userId);
 }
