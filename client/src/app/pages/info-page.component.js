@@ -14,6 +14,7 @@ class InfoPageComponent extends WFMComponent {
         };
 
         this.service = {};
+        // this.service = this.ioc.use(DataService);
     }
 
     onInit() {
@@ -35,6 +36,9 @@ export const infoPageComponent = new InfoPageComponent({
         <h2>{{title}}</h2>
         <p>{{message}}</p>
         <p>{{messageError}}</p>
+        <div class="btn-container">
+            <button type="text" class="btn-get-users">Загрузить список пользователей</button>        
+        </div>
     </div>
     `,
     styles: `

@@ -234,3 +234,51 @@ p {
     color: #dc2f55;
     text-align: center;
 }
+
+.btn-get-users {
+    background-color: rgb(29, 190, 218);
+    border-radius: 12px;
+    border: 0;
+    box-sizing: border-box;
+    color: #eee;
+    cursor: pointer;
+    font-size: 14px;
+    height: 30px;
+    margin-top: 38px;
+    /* text-align: center; */
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.color {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 14px;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.color th,
+.color td:first-child {
+    background: #afcde7;
+    color: white;
+    padding: 10px 20px;
+}
+
+.color th,
+.color td {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: white;
+}
+
+.color td {
+    background: #d8e6f3;
+}
+
+.color th:first-child,
+.color td:first-child {
+    text-align: left;
+}
