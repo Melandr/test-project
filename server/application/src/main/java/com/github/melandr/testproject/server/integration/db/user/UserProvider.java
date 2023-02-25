@@ -43,14 +43,13 @@ class UserProvider implements UserProviderI {
 		String lastName = rs.getString("FIRST_NAME");
 		String middleName = rs.getString("FIRST_NAME");
 		
-		new User(rs.getInt("ID"), rs.getString("LOGIN"), rs.getString("PASSWORD").getBytes(StandardCharsets.UTF_8),
+		return new User(rs.getInt("ID"), rs.getString("LOGIN"), rs.getString("PASSWORD").getBytes(StandardCharsets.UTF_8),
 				StringUtils.join(new String[] { firstName, lastName, middleName }, " "),
 				firstName, lastName, middleName,
 				rs.getString("PHONE"), rs.getString("EMAIL"),
 				//TODO вернуть тут фото PHOTO blob(10K)
 				null
 				);
-		return null;
 	}
 
 	@Override
