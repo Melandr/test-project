@@ -253,32 +253,32 @@ p {
     justify-content: center;
 }
 
-.color {
+.users {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
     font-size: 14px;
     border-collapse: collapse;
     text-align: center;
 }
 
-.color th,
-.color td:first-child {
+.users th,
+.users td:first-child {
     background: #afcde7;
     color: white;
     padding: 10px 20px;
 }
 
-.color th,
-.color td {
+.users th,
+.users td {
     border-style: solid;
     border-width: 0 1px 1px 0;
     border-color: white;
 }
 
-.color td {
+.users td {
     background: #d8e6f3;
 }
 
-.color th:first-child,
-.color td:first-child {
+.users th:first-child,
+.users td:first-child {
     text-align: left;
 }
