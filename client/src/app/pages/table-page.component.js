@@ -1,12 +1,12 @@
 import { WFMComponent } from "framework";
 
-class TableOfUsers extends WFMComponent {
+class TablePageComponent extends WFMComponent {
     constructor(config) {
         super(config);
     }
 }
 
-export const tableOfUsers = new TableOfUsers({
+export const tablePageComponent = new TablePageComponent({
     selector: "table-of-users",
     template: `
         <div class="table-users__block">

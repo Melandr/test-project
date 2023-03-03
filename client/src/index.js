@@ -5,5 +5,4 @@ import "./styles.css";
 import { bootstrap, _ } from "framework";
 import { appModule } from "./app/app.module";
 
-
 bootstrap(appModule);

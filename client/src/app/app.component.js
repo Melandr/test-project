@@ -1,5 +1,4 @@
 import { WFMComponent, ioc } from "framework";
-import DataServiceProvider from "../app/services/data.service-provider";
 
 class AppComponent extends WFMComponent {
     constructor(config) {
