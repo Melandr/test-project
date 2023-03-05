@@ -1,7 +1,8 @@
 class HTTP {
-    get(url) {
+    get(url, myHeaders) {
         const options = {
             method: "GET",
+            headers: myHeaders,
         };
         return sendRequest(url, options);
     }
@@ -17,8 +18,9 @@ class HTTP {
     }
 }
 
-function sendRequest(url, options, data = {}) {
-    return fetch(url, options).then(manageErrors);
+async function sendRequest(url, options, data = {}) {
+    const response = await fetch(url, options);
+    return manageErrors(response);
 }
 
 async function manageErrors(response) {
@@ -34,6 +36,12 @@ async function manageErrors(response) {
     }
     return response;
 }
+
+export const http = new HTTP();
+
+// function sendRequest(url, options, data = {}) {
+//     return fetch(url, options).then(manageErrors);
+// }
 
 // function manageErrors(response) {
 //     if (!response.ok) {
@@ -55,5 +63,3 @@ async function manageErrors(response) {
 //     }
 //     return response;
 // }
-
-export const http = new HTTP();

@@ -1,10 +1,6 @@
 import { WFMComponent, ioc, router, $, _, validateField, http, jwt } from "framework";
 import { secret_key, api_url, auth_url, detail_url, proxy_url } from "../config.js";
 
-import { registerProviders } from "../../framework/core/providers/register-providers.js";
-import { APP_TITLE_TOKEN } from "../services/contracts";
-import ExampleServiceProvider from "../services/example.service-provider";
-import { ExampleService } from "../services/example.service";
 import DataServiceProvider from "../services/data.service-provider";
 import { DataService } from "../services/data.service";
 
@@ -73,9 +69,7 @@ class LoginPageComponent extends WFMComponent {
         }
     }
 
-    clearContainerIOC() {
-
-    }
+    clearContainerIOC() {}
 
     //функция валидации формы
     validation(domObject, typeDomObject, minlength) {
@@ -123,6 +117,11 @@ class LoginPageComponent extends WFMComponent {
         $(target).removeClass("active");
     }
 
+    // const token = await getTokenData();
+    // if ( token ) {
+    //  const userName =  await getUserName();
+    // }
+
     //функция получения токена авторизации
     getTokenData(response) {
         const url = proxy_url + auth_url;
@@ -136,7 +135,6 @@ class LoginPageComponent extends WFMComponent {
                 return Promise.resolve(data.token);
             })
             .catch((error) => {
-                // console.log(error);
                 return Promise.reject(error);
                 //тут нужно вывести текст ошибки
             });
@@ -144,8 +142,30 @@ class LoginPageComponent extends WFMComponent {
         return result;
     }
 
+    //Функция вывода имени пользователя при удачной авторизации
+    getUserName() {
+        const url = proxy_url + detail_url;
+
+        const headers = new Headers();
+        headers.append("tmst", jwt._formatDate());
+        headers.append("token", _.getToken());
+        headers.append("sign", jwt.createSign(api_url + detail_url, _.getToken(), secret_key));
+
+        const result = http
+            .get(url, headers)
+            .then((response) => response.json())
+            .then((data) => {
+                return Promise.resolve(data.name);
+            })
+            .catch((error) => {
+                return Promise.reject(error);
+            });
+
+        return result;
+    }
+
     //Функция получения детальной информации о пользователе
-    getUserDetailInfo(sucess) {
+    getUserDetailInfo() {
         const url = proxy_url + detail_url;
 
         const options = {
@@ -162,7 +182,7 @@ class LoginPageComponent extends WFMComponent {
                 return response.json().then((request) => {
                     console.log(response);
                     const name = request.name;
-                    sucess(name);
+                    // sucess(name);
                 });
             }
         });
