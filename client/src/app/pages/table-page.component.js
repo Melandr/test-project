@@ -1,4 +1,4 @@
-import { WFMComponent, router } from "framework";
+import { WFMComponent, router, dom } from "framework";
 
 class TablePageComponent extends WFMComponent {
     constructor(config) {
@@ -16,18 +16,28 @@ class TablePageComponent extends WFMComponent {
         router.setRoute("/");
     }
 
-    afterInit(){
-        
+    onInit() {
+        super.onInit();
+
+        this.getUsers();
     }
+
+    afterInit() {
+        const table = this.el.find("#table-users");
+        console.log(table);
+    }
+
+    getUsers() {}
 }
 
 export const tablePageComponent = new TablePageComponent({
     selector: "table-of-users",
     template: `
         <div class="table-users__block">
-            <table class="users">
+            <table class="users" id="table-users">
             <tbody>
                 <tr>
+                    <th>Id</th>
                     <th>Логин</th>
                     <th>Фамилия</th>
                     <th>Имя</th>
@@ -44,12 +54,14 @@ export const tablePageComponent = new TablePageComponent({
                     <td>40.3</td>
                     <td>40.3</td>
                     <td>40.3</td>
+                    <td>40.3</td>
                 </tr>
                 <tr>
                     <td>Google</td>
                     <td>50.2</td>
                     <td>40.63</td>
                     <td>45.23</td>
+                    <td>39.3</td>
                     <td>39.3</td>
                     <td>39.3</td>
                     <td>39.3</td>
@@ -62,12 +74,14 @@ export const tablePageComponent = new TablePageComponent({
                     <td>36.7</td>
                     <td>36.7</td>
                     <td>36.7</td>
+                    <td>36.7</td>
                 </tr>
                 <tr>
                     <td>IBM</td>
                     <td>20.4</td>
                     <td>15.6</td>
                     <td>22.3</td>
+                    <td>29.3</td>
                     <td>29.3</td>
                     <td>29.3</td>
                     <td>29.3</td>

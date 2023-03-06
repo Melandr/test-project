@@ -9,12 +9,14 @@ class DOMManipulator {
         this.isWFM = true;
     }
 
+    //подключает обработчик событий к элементу
     on(eventName, func, context = null) {
         func = func.bind(context);
         this.nativeElement.addEventListener(eventName, func);
         return this;
     }
 
+    //удаляет обработчик событий из элемента
     off(eventName, func) {
         this.nativeElement.removeEventListener(eventName, func);
         return this;
@@ -30,20 +32,24 @@ class DOMManipulator {
         return this;
     }
 
+    //добавляет класс к элементу
     addClass(className) {
         this.nativeElement.classList.add(className);
         return this;
     }
 
+    //удаляет класс из элемента
     removeClass(className) {
         this.nativeElement.classList.remove(className);
         return this;
     }
 
+    //проверяет наличие класса в элементе
     hasClass(className) {
         return this.nativeElement.classList.contains(className);
     }
 
+    //помещает текст в элемент
     html(html) {
         if (html.isWFM) html = html.nativeElement.innerHTML;
         this.nativeElement.innerHTML = html;

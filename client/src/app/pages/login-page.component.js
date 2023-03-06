@@ -166,28 +166,6 @@ class LoginPageComponent extends WFMComponent {
 
         return result;
     }
-
-    //Функция получения детальной информации о пользователе
-    async getUserDetailInfo() {
-        const url = proxy_url + detail_url;
-
-        const options = {
-            method: "GET",
-            headers: {
-                tmst: jwt._formatDate(),
-                token: _.getToken(),
-                sign: jwt.createSign(api_url + detail_url, _.getToken(), secret_key),
-            },
-        };
-
-        const response = await fetch(url, options);
-        if (response.status === 200) {
-            return response.json().then((request) => {
-                console.log(response);
-                const name = request.name;
-            });
-        }
-    }
 }
 
 export const loginPageComponent = new LoginPageComponent({
