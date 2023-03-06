@@ -56,13 +56,17 @@ class LoginPageComponent extends WFMComponent {
             };
 
             this.getTokenData(formData)
+                .then((token) => {
+                    _.saveToken(token);
+                })
+                .then(this.getUserName)
                 .then((data) => {
                     dataService.setMessage(data);
                     router.setRoute("/info");
                 })
                 .catch((data) => {
-                    dataService.setError(data);
-                    router.setRoute("/info");
+                    dataService.setMessage(data);
+                    router.setRoute("/error");
                 });
         } catch (err) {
             console.log(err);
@@ -130,13 +134,10 @@ class LoginPageComponent extends WFMComponent {
             .post(url, response)
             .then((response) => response.json())
             .then((data) => {
-                _.saveToken(data.token);
-
                 return Promise.resolve(data.token);
             })
             .catch((error) => {
                 return Promise.reject(error);
-                //тут нужно вывести текст ошибки
             });
 
         return result;
@@ -153,7 +154,9 @@ class LoginPageComponent extends WFMComponent {
 
         const result = http
             .get(url, headers)
-            .then((response) => response.json())
+            .then((response) => {
+                if (response.status === 200) return response.json();
+            })
             .then((data) => {
                 return Promise.resolve(data.name);
             })
@@ -165,7 +168,7 @@ class LoginPageComponent extends WFMComponent {
     }
 
     //Функция получения детальной информации о пользователе
-    getUserDetailInfo() {
+    async getUserDetailInfo() {
         const url = proxy_url + detail_url;
 
         const options = {
@@ -177,15 +180,13 @@ class LoginPageComponent extends WFMComponent {
             },
         };
 
-        return fetch(url, options).then((response) => {
-            if (response.status === 200) {
-                return response.json().then((request) => {
-                    console.log(response);
-                    const name = request.name;
-                    // sucess(name);
-                });
-            }
-        });
+        const response = await fetch(url, options);
+        if (response.status === 200) {
+            return response.json().then((request) => {
+                console.log(response);
+                const name = request.name;
+            });
+        }
     }
 }
 

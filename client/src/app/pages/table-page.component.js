@@ -1,8 +1,23 @@
-import { WFMComponent } from "framework";
+import { WFMComponent, router } from "framework";
 
 class TablePageComponent extends WFMComponent {
     constructor(config) {
         super(config);
+    }
+
+    events() {
+        return {
+            "click .js-link": "goToHome",
+        };
+    }
+
+    goToHome(event) {
+        event.preventDefault();
+        router.setRoute("/");
+    }
+
+    afterInit(){
+        
     }
 }
 
@@ -19,12 +34,14 @@ export const tablePageComponent = new TablePageComponent({
                     <th>Отчество</th>
                     <th>Телефон</th>
                     <th>Email</th>
+                    <th>Фото</th>
                 </tr>
                 <tr>
                     <td>Microsoft</td>
                     <td>20.3</td>
                     <td>30.5</td>
                     <td>23.5</td>
+                    <td>40.3</td>
                     <td>40.3</td>
                     <td>40.3</td>
                 </tr>
@@ -35,12 +52,14 @@ export const tablePageComponent = new TablePageComponent({
                     <td>45.23</td>
                     <td>39.3</td>
                     <td>39.3</td>
+                    <td>39.3</td>
                 </tr>
                 <tr>
                     <td>Apple</td>
                     <td>25.4</td>
                     <td>30.2</td>
                     <td>33.3</td>
+                    <td>36.7</td>
                     <td>36.7</td>
                     <td>36.7</td>
                 </tr>
@@ -51,14 +70,16 @@ export const tablePageComponent = new TablePageComponent({
                     <td>22.3</td>
                     <td>29.3</td>
                     <td>29.3</td>
+                    <td>29.3</td>
                 </tr>
             </tbody>
         </table>
         </div>            
-        <div>
-            <a href="#">Перейти на главную</a>             
+        <div class="link__block">
+            <a href="#not-existing-path" class="js-link nav__link">Перейти на главную</a>  
         </div>
     `,
     styles: `
+        .table-users__block {display: flex; justify-content: center; margin-top: 30px; color: black;}
     `,
 });

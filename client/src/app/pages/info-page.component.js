@@ -7,14 +7,22 @@ class InfoPageComponent extends WFMComponent {
         super(config);
 
         this.data = {
-            title: "Информация о пользователе",
-            message: "",
-            error: {},
-            messageError: "",
+            title: "Добро пожаловать,",
+            name: "",
         };
 
         this.service = {};
         // this.service = this.ioc.use(DataService);
+    }
+
+    events() {
+        return {
+            "click .btn-get-users": "showTableUsers",
+        };
+    }
+
+    showTableUsers() {
+        router.setRoute("/table");
     }
 
     onInit() {
@@ -22,10 +30,7 @@ class InfoPageComponent extends WFMComponent {
 
         this.service = this.ioc.use(DataService);
 
-        this.data.message = this.service.getMessage() ?? "";
-        this.data.error = this.service.getError();
-        this.data.messageError = this.service.getError().message ?? "";
-        console.log(this.data);
+        this.data.name = this.service.getMessage() ?? "";
     }
 }
 
@@ -34,8 +39,7 @@ export const infoPageComponent = new InfoPageComponent({
     template: `
     <div class="info">
         <h2>{{title}}</h2>
-        <p>{{message}}</p>
-        <p>{{messageError}}</p>
+        <p>{{name}}</p>
         <div class="btn-container">
             <button type="text" class="btn-get-users">Загрузить список пользователей</button>        
         </div>
