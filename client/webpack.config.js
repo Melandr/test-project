@@ -26,7 +26,7 @@ module.exports = {
         },
         port: 3000,
         proxy: {
-            "/server-app/client/*": {
+            "/server-app/*": {
                 target: "http://localhost:8080",
                 changeOrigin: true,
                 secure: false,

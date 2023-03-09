@@ -13,3 +13,7 @@ VALUES('user_1', 'melandr3', 'Иванов', 'Иван', 'Иванович');
 INSERT INTO PUBLIC.USERS
 (LOGIN, PASSWORD, FIRST_NAME, LAST_NAME, MIDDLE_NAME)
 VALUES('user_2', '12345', 'Семенов', 'Сергей', 'Степанович');
+
+INSERT INTO PUBLIC.USERS
+(LOGIN, PASSWORD, FIRST_NAME, LAST_NAME, MIDDLE_NAME)
+VALUES('user_3', 'abcde', 'Пименов', 'Алексей', 'Сергеевич');

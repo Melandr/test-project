@@ -1,5 +1,5 @@
 import { WFMComponent, ioc, router, $, _, validateField, http, jwt } from "framework";
-import { secret_key, api_url, auth_url, detail_url, proxy_url } from "../config.js";
+import { secret_key, api_url, auth_url, detail_url, base_url, client_url } from "../config.js";
 
 import DataServiceProvider from "../services/data.service-provider";
 import { DataService } from "../services/data.service";
@@ -128,7 +128,7 @@ class LoginPageComponent extends WFMComponent {
 
     //функция получения токена авторизации
     getTokenData(response) {
-        const url = proxy_url + auth_url;
+        const url = base_url + client_url + auth_url;
 
         const result = http
             .post(url, response)
@@ -145,12 +145,12 @@ class LoginPageComponent extends WFMComponent {
 
     //Функция вывода имени пользователя при удачной авторизации
     getUserName() {
-        const url = proxy_url + detail_url;
+        const url = base_url + client_url + detail_url;
 
         const headers = new Headers();
         headers.append("tmst", jwt._formatDate());
         headers.append("token", _.getToken());
-        headers.append("sign", jwt.createSign(api_url + detail_url, _.getToken(), secret_key));
+        headers.append("sign", jwt.createSign(api_url + client_url + detail_url, _.getToken(), secret_key));
 
         const result = http
             .get(url, headers)
